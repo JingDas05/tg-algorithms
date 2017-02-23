@@ -98,7 +98,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.8</source>
-                    <target>1.8</target>
+                    <condition>1.8</condition>
                 </configuration>
             </plugin>
             <!--为了读取bootstrap配置文件server 4567，添加如下配件-->
