@@ -1,4 +1,4 @@
-package top.treegrowth.parallelism;
+package top.treegrowth.parallelism.chapter2;
 
 /**
  * @author wusi

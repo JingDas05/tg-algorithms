@@ -1,4 +1,4 @@
-package top.treegrowth.parallelism.yield;
+package top.treegrowth.parallelism.chapter2.yield;
 
 /**
  * @author wusi
