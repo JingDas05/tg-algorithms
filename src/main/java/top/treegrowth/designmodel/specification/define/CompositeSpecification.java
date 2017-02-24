@@ -1,5 +1,7 @@
 package top.treegrowth.designmodel.specification.define;
 
+import top.treegrowth.designmodel.specification.model.AbstractModel;
+
 /**
  * @author wusi
  * @version 2017/2/23 17:32
@@ -7,7 +9,7 @@ package top.treegrowth.designmodel.specification.define;
 public abstract class CompositeSpecification implements ISpecification {
 
     @Override
-    public abstract boolean isSatisfiedBy(Object value);
+    public abstract boolean isSatisfiedBy(AbstractModel condition);
 
     @Override
     public ISpecification and(ISpecification iSpecification) {
@@ -16,11 +18,11 @@ public abstract class CompositeSpecification implements ISpecification {
 
     @Override
     public ISpecification or(ISpecification iSpecification) {
-        return null;
+        return new OrSpecification(this, iSpecification);
     }
 
     @Override
     public ISpecification not(ISpecification iSpecification) {
-        return null;
+        return new NotSpecification(iSpecification);
     }
 }

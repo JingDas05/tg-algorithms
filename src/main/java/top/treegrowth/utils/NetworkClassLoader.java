@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 /**
  * Network class Loader to load Classes on different JVMs needed to provide a
- * User Defined Functions (Filter API) on the server side w/o needing to add jar
+ * AbstractModel Defined Functions (Filter API) on the server side w/o needing to add jar
  * on each server.
  *
  * @author wusi

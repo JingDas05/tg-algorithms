@@ -1,12 +1,14 @@
 package top.treegrowth.designmodel.specification.define;
 
+import top.treegrowth.designmodel.specification.model.AbstractModel;
+
 /**
  * @author wusi
  * @version 2017/2/23 14:10
  */
 public interface ISpecification {
 
-    boolean isSatisfiedBy(Object value);
+    boolean isSatisfiedBy(AbstractModel condition);
 
     ISpecification and(ISpecification iSpecification);
 

@@ -32,7 +32,7 @@ public class StopThreadUnsafe {
 
         @Override
         public String toString() {
-            return "User[id=" + id + ",name=" + name + "}";
+            return "AbstractModel[id=" + id + ",name=" + name + "}";
         }
 
         public static class ChangeObjectThread extends Thread {

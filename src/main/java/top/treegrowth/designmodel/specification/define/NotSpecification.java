@@ -1,5 +1,7 @@
 package top.treegrowth.designmodel.specification.define;
 
+import top.treegrowth.designmodel.specification.model.AbstractModel;
+
 /**
  * @author wusi
  * @version 2017/2/23 17:24
@@ -13,7 +15,7 @@ public class NotSpecification extends CompositeSpecification {
     }
 
     @Override
-    public boolean isSatisfiedBy(Object value) {
-        return !target.isSatisfiedBy(value);
+    public boolean isSatisfiedBy(AbstractModel condition) {
+        return !target.isSatisfiedBy(condition);
     }
 }
