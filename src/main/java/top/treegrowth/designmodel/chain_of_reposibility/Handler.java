@@ -1,6 +1,8 @@
 package top.treegrowth.designmodel.chain_of_reposibility;
 
 /**
+ * 这个是责任链的处理者，抽象类
+ *
  * @author wusi
  * @version 2017/2/25 22:37.
  */

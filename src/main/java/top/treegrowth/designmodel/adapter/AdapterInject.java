@@ -1,8 +1,9 @@
 package top.treegrowth.designmodel.adapter;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
+ * 适配器属性通过注入获取
+ *
  * @author wusi
  * @version 2017/2/23 14:05
  */

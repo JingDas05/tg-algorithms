@@ -1,6 +1,8 @@
 package top.treegrowth.designmodel.bridge;
 
 /**
+ * 这个是个抽象桥梁，把它的子类和 Implement 联系起来了
+ *
  * @author wusi
  * @version 2017/2/23 13:45
  */
