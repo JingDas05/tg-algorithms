@@ -4,39 +4,67 @@
     <title>Vue</title>
 
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 </head>
 <body>
-<div id="counter-event-example">
-    <p>{{ total }}</p>
-    <button-counter v-on:increment="incrementTotal"></button-counter>
-    <button-counter v-on:increment="incrementTotal"></button-counter>
+
+<div id="app">
+    <p>
+        <router-link to="/user">/user/foo</router-link>
+        <router-link to="/user/profile">/user/foo/profile</router-link>
+        <router-link to="/user/posts">/user/foo/posts</router-link>
+
+    </p>
+    <router-view name="user"></router-view>
+    <router-view name="user2"></router-view>
 </div>
+
 </body>
 <script>
-    Vue.component('button-counter', {
-        template: '<button v-on:click="increment">{{ counter }}</button>',
-        data: function () {
-            return {
-                counter: 0
+    const User = {
+        template: `
+    <div class="user">
+      <h2>User {{ $route.params.id }}</h2>
+      <router-view ></router-view>
+    </div>
+  `
+    }
+
+    const User2 = {
+        template: `
+    <div class="user">
+      <h2>User {{ $route.params.id }}</h2>
+      <router-view ></router-view>
+    </div>
+  `
+    }
+
+    const UserHome = {template: '<div>Home</div>'}
+    const UserProfile = {template: '<div>Profile</div>'}
+    const UserPosts = {template: '<div>Posts</div>'}
+
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/user', components: {user: User, user2: User2},
+                children: [
+                    // UserHome will be rendered inside User's <router-view>
+                    // when /user/:id is matched
+                    {path: '', component: UserHome},
+
+                    // UserProfile will be rendered inside User's <router-view>
+                    // when /user/:id/profile is matched
+                    {path: 'profile', component: UserProfile},
+
+                    // UserPosts will be rendered inside User's <router-view>
+                    // when /user/:id/posts is matched
+                    {path: 'posts', component: UserPosts}
+
+                ]
             }
-        },
-        methods: {
-            increment: function () {
-                this.counter += 1
-                this.$emit('increment')
-            }
-        },
+        ]
     })
-    new Vue({
-        el: '#counter-event-example',
-        data: {
-            total: 0
-        },
-        methods: {
-            incrementTotal: function () {
-                this.total += 1
-            }
-        }
-    })
+
+    const app = new Vue({router}).$mount('#app')
 </script>
 </html>
