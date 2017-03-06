@@ -45,13 +45,17 @@ public class TreeBuilder {
     }
 
     /**
-     * 递归子节点
-     *
+     * 递归子节点，这个方法很重要，大体思路就是
+     * 先找出所有的根节点，之后找到每个根节点的childList,调用node setMenus方法
+     *这样只能找到根节点和根节点的直接childList，为了能遍历整个树状结构，需要
+     * 递归调用自己，递推结束的条件就是自己没有child了
      * @param node
      */
     public void buildChildNodes(Node node) {
         List<Node> children = getChildNodes(node);
+        //判断是否是最后的节点
         if (!children.isEmpty()) {
+            //递归执行本方法
             for (Node child : children) {
                 buildChildNodes(child);
             }
@@ -77,7 +81,7 @@ public class TreeBuilder {
     }
 
     /**
-     * 判断是否为根节点
+     * 判断是否为根节点，遍历所有元素，寻找node的pid是否在id中存在
      *
      //* @param nodes
      //* @param inNode
