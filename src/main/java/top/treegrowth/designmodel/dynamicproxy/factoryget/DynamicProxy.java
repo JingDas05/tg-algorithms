@@ -1,4 +1,4 @@
-package top.treegrowth.designmodel.dynamicproxy;
+package top.treegrowth.designmodel.dynamicproxy.factoryget;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +19,12 @@ public class DynamicProxy {
     public DynamicProxy(Object target) {
         this.target = target;
         Class targetClazz = target.getClass();
+        /**
+         * 创建代理类
+         * @param 类加载器，获取被代理对象的类加载器
+         * @param 接口，获取被代理对象实现的方法
+         * @param 代理处理器，代理类执行的时候执行的处理器
+         * */
         this.proxy = Proxy.newProxyInstance(
                 targetClazz.getClassLoader(),
                 targetClazz.getInterfaces(),
@@ -32,6 +38,7 @@ public class DynamicProxy {
         for (int i = 0; i < args.length; i++) {
             paramTypes[i] = args[i].getClass();
         }
+        //执行代理类的方法，包含了前置后置通知
         Method method = proxy.getClass().getMethod(methodName, paramTypes);
         try {
             result = method.invoke(this.proxy, args);
@@ -43,7 +50,9 @@ public class DynamicProxy {
         return result;
     }
 
-    //定义一个执行处理器，创建代理类时需要执行处理器
+    /**
+     * 定义一个执行处理器，创建代理类时需要执行的处理器，
+     * */
     class MyInvokeHandler implements InvocationHandler {
 
         private Object target;
@@ -52,6 +61,12 @@ public class DynamicProxy {
             this.target = target;
         }
 
+        /**
+         * 定义一个执行处理器，创建代理类时需要执行的处理器，
+         * @param proxy 此类是在 newProxyInstance中传入的，在newProxyInstance中传入的，此处不用传入（有些困惑）
+         * @param method 这个方法是被代理的类的方法，在newProxyInstance中传入的，此处不用传入，只是执行（有些困惑）
+         * @param args 这个参数是被代理的类的输入参数，这个地方是Object类型的，在newProxyInstance中传入的
+         * */
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             Object result;

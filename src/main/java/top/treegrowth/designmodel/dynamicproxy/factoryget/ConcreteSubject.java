@@ -1,4 +1,4 @@
-package top.treegrowth.designmodel.dynamicproxy;
+package top.treegrowth.designmodel.dynamicproxy.factoryget;
 
 /**
  * @author wusi
