@@ -17,7 +17,7 @@ public class SocketConnetClient {
     public static void main(String[] args) throws IOException {
 
         String host = "localhost";
-        int port = 4567;
+        int port = 1234;
 
         InetSocketAddress addr = new InetSocketAddress(host, port);
         SocketChannel sc = SocketChannel.open();
@@ -30,7 +30,7 @@ public class SocketConnetClient {
         }
         System.out.println("connect established");
         Socket socket = sc.socket();
-        //打印从服务器获取的socket字段
+        //打印从服务器获取的socket字段, 也是结合Class SelectSockets的客户端
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         System.out.println(bufferedReader.readLine());
         sc.close();

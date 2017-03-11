@@ -13,7 +13,7 @@ public abstract class Handler {
     public void handleMessage(Request request) {
 
         if (this.getLevel() == request.getLevel()) {
-            this.handleMessage(request);
+            this.echo(request);
         } else {
             if (this.nextHandler != null) {
                 this.nextHandler.handleMessage(request);
