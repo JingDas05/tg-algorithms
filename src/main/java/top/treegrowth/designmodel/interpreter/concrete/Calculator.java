@@ -12,11 +12,11 @@ import java.util.Stack;
  * @author wusi
  * @version 2017/3/14 13:15
  */
-public class Caculator {
+public class Calculator {
 
     private Expression expression;
 
-    public Caculator(String expStr) {
+    public Calculator(String expStr) {
 
         //定义一个堆栈，安排运算的先后顺序,构建语法过程
         Stack<Expression> stack = new Stack<>();
