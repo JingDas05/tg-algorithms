@@ -120,8 +120,7 @@ public class SelectSocketsCustom {
      *
      * @param channel 新连接通道
      */
-    private void sayHello(SocketChannel channel)
-            throws Exception {
+    private void sayHello(SocketChannel channel) throws Exception {
         buffer.clear();
         buffer.put("Hi there!\r\n".getBytes());
         buffer.flip();
