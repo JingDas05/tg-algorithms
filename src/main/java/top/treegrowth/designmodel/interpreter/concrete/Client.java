@@ -31,7 +31,9 @@ public class Client {
                 //解决参数重复的问题
                 if (!ctx.containsKey(String.valueOf(c))) {
                     System.out.println("输入" + c + "的值");
-                    Integer value = new BufferedReader(new InputStreamReader(System.in)).read();
+                    //read 的方法结果不对！！
+//                    Integer value =new BufferedReader(new InputStreamReader(System.in)).read();
+                    Integer value =Integer.valueOf(new BufferedReader(new InputStreamReader(System.in)).readLine());
                     ctx.put(String.valueOf(c), value);
                 }
             }
