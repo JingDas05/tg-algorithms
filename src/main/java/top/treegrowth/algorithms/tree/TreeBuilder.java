@@ -67,13 +67,13 @@ public class TreeBuilder {
      * 获取父节点下所有的子节点
      *
      //* @param nodes
-     * @param pnode
+     * @param node
      * @return
      */
-    public List<Node> getChildNodes(Node pnode) {
+    public List<Node> getChildNodes(Node node) {
         List<Node> childNodes = new ArrayList<Node>();
         for (Node n : nodes) {
-            if (pnode.getId().equals(n.getPid())) {
+            if (node.getId().equals(n.getPid())) {
                 childNodes.add(n);
             }
         }
