@@ -31,6 +31,7 @@ public class Xmlparser {
         element.getName();
         element.attributeCount();
         element.attributeValue("");
+        element.elements();
     }
 
     public Document createDocument() throws DocumentException {
@@ -42,7 +43,8 @@ public class Xmlparser {
     //下面是write大多数的操作
     public void writeOperation() throws DocumentException, IOException {
         Document document = createDocument();
-        document.addElement("elementName");
+        Element element = document.addElement("elementName");
+        element.addAttribute("name", "value");
         //指定输出格式
         OutputFormat format = OutputFormat.createPrettyPrint();//Format格式！！
         format.setEncoding("UTF-8");
@@ -52,7 +54,7 @@ public class Xmlparser {
          * this.getClass().getResource("/"), 获取类加载的根路径   D:\git\daotie\daotie\target\classes
          * this.getClass().getResource(""), 获取当前类的所在工程路径; 如果不加“/”  获取当前类的加载目录  D:\git\daotie\daotie\target\classes\my
          */
-        File file = new File(this.getClass().getResource("/").getPath()+"/");
+        File file = new File(this.getClass().getResource("/").getPath() + "/");
         if (!file.getParentFile().exists())
             file.getParentFile().mkdirs();
         if (!file.exists()) file.createNewFile();
