@@ -24,7 +24,7 @@ public class MethodQuote {
         System.out.println(normal(() -> "我不是方法引用的用法"));
         System.out.println(normal(() -> new Apple(400)));
         //方法引用的调用
-        //System.out.println(normal(Apple::new));
+        //System.out.println(normal(Apple1::new));
     }
 
     public static <T> T normal(CustomSupplier<T> custom) {
