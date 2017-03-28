@@ -2,13 +2,12 @@ package top.treegrowth.javasource;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * @author wusi
  * @version 2017/3/24 13:00
  */
-public class ListRelation {
+public class ComparatorCus {
 
     public static void main(String[] args) {
         Apple1[] apple1s = new Apple1[]{new Apple1(3), new Apple1(4)};
