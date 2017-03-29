@@ -61,6 +61,7 @@ public class Xmlparser {
         //构建输出流 文件或者字符串
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         StringWriter strWtr = new StringWriter();
+        //下面的fileOutputStream 可以换成 strWtr
         XMLWriter xmlWriter = new XMLWriter(fileOutputStream, format);
         xmlWriter.write(document);
         xmlWriter.close();
