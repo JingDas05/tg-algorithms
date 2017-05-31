@@ -1,4 +1,4 @@
-package top.treegrowth.designmodel.state.demo1;
+package top.treegrowth.designmodel.state.define;
 
 /**
  * 定义抽象状态，并且定义抽象方法doSomething1() 和 doSomething2(),子类需要实现

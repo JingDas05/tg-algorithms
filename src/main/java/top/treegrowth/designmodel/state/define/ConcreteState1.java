@@ -1,6 +1,6 @@
-package top.treegrowth.designmodel.state.demo1;
+package top.treegrowth.designmodel.state.define;
 
-import static top.treegrowth.designmodel.state.demo1.Context.STATE2;
+import static top.treegrowth.designmodel.state.define.Context.STATE2;
 
 /**
  * @author wusi

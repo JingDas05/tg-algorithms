@@ -1,4 +1,4 @@
-package top.treegrowth.designmodel.state.demo1;
+package top.treegrowth.designmodel.state.define;
 
 /**
  * @author wusi
