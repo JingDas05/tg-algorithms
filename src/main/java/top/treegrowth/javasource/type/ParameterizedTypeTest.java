@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  *
- * 容器
+ * 容器泛型
  *
  * @author wusi
  * @version 2017/6/8 17:00

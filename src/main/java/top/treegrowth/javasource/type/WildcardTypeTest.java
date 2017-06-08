@@ -8,7 +8,7 @@ import java.lang.reflect.WildcardType;
 import java.util.List;
 
 /**
- * 通配符
+ * 通配符泛型
  *
  * @author wusi
  * @version 2017/6/8 17:23

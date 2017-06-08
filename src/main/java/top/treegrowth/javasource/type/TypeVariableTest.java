@@ -8,6 +8,9 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 /**
+ *
+ * 变量泛型
+ *
  * @author wusi
  * @version 2017/6/8 17:16
  */
