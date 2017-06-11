@@ -1,6 +1,8 @@
 package top.treegrowth.javasource;
 
 /**
+ * 左移运算符与右移运算符，无符号右移
+ *
  * @author wusi
  * @version 2017/6/11 20:49.
  */
