@@ -3,6 +3,8 @@ package top.treegrowth.designmodel.flyweight;
 import java.util.Date;
 
 /**
+ * 享元模式
+ *
  * @author wusi
  * @version 2017/3/12 10:48
  */
