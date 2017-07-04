@@ -7,6 +7,8 @@ import org.junit.Test;
  * 如果线程在计算过程中，请求的栈深度大于最大可用的栈深度，则抛出 {@link StackOverflowError}
  * 如果java栈可以动态拓展，而在拓展栈的过程中，没有足够的内存空间来支持栈的拓展，则抛出 {@link OutOfMemoryError}
  *
+ * -Xss2m
+ *
  * @author wusi
  * @version 2017/7/4 6:17.
  */
