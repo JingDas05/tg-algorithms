@@ -1,4 +1,4 @@
-package top.treegrowth.javasource.bridgemethod;
+package top.treegrowth.java.bridgemethod;
 
 /**
  *

@@ -1,4 +1,4 @@
-package top.treegrowth.javasource.publishervslistener;
+package top.treegrowth.java.publishervslistener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

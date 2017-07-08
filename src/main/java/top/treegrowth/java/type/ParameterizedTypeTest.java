@@ -1,4 +1,4 @@
-package top.treegrowth.javasource.type;
+package top.treegrowth.java.type;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;

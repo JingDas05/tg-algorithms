@@ -1,4 +1,4 @@
-package top.treegrowth.javasource;
+package top.treegrowth.java;
 
 /**
  * 左移运算符与右移运算符，无符号右移

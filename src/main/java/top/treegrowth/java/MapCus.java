@@ -1,4 +1,4 @@
-package top.treegrowth.javasource;
+package top.treegrowth.java;
 
 import java.util.Map;
 

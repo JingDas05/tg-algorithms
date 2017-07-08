@@ -1,4 +1,4 @@
-package top.treegrowth.javasource.publishervslistener;
+package top.treegrowth.java.publishervslistener;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;

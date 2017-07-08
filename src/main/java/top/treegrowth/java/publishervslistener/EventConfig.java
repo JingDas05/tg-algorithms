@@ -1,4 +1,4 @@
-package top.treegrowth.javasource.publishervslistener;
+package top.treegrowth.java.publishervslistener;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration;
  * @version 2017/3/28 7:41.
  */
 @Configuration
-@ComponentScan(value = "top.treegrowth.javasource.publishervslistener")
+@ComponentScan(value = "top.treegrowth.java.publishervslistener")
 public class EventConfig {
 }

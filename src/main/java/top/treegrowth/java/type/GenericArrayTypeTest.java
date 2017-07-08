@@ -1,4 +1,4 @@
-package top.treegrowth.javasource.type;
+package top.treegrowth.java.type;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;

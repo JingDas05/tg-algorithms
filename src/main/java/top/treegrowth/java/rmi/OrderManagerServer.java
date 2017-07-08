@@ -1,4 +1,4 @@
-package top.treegrowth.javasource.rmi;
+package top.treegrowth.java.rmi;
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;

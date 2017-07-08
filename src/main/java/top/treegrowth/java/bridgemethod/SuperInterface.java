@@ -1,4 +1,4 @@
-package top.treegrowth.javasource.bridgemethod;
+package top.treegrowth.java.bridgemethod;
 
 /**
  * 测试java桥接方法 反射method isBridge()来判断

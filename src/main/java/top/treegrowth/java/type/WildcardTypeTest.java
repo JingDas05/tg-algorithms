@@ -1,4 +1,4 @@
-package top.treegrowth.javasource.type;
+package top.treegrowth.java.type;
 
 import org.springframework.util.Assert;
 
