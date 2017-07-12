@@ -2,16 +2,15 @@ package top.treegrowth.designmodel.decorator;
 
 /**
  * @author wusi
- * @version 2017/2/27 9:57
+ * @version 2017/7/12 9:00
  */
-public class ConcereteDecoreator1 extends Decorator {
-
-    public ConcereteDecoreator1(AbstractComponent abstractComponent) {
+public class ConcereteDecoreator2 extends Decorator {
+    public ConcereteDecoreator2(AbstractComponent abstractComponent) {
         super(abstractComponent);
     }
 
     public void selfMethod() {
-        System.out.println("装饰者1");
+        System.out.println("装饰者2");
     }
 
     //修饰装饰的abstractComponent 添加行为

@@ -7,6 +7,6 @@ package top.treegrowth.designmodel.decorator;
 public class ConcereteComponent1 extends AbstractComponent{
     @Override
     public void operate() {
-
+        System.out.println("组件1");
     }
 }
