@@ -2,6 +2,8 @@ package top.treegrowth.designmodel.facade;
 
 /**
  *
+ * 门面模式
+ *
  * 单一职责原则
  * 依赖倒置原则
  * 接口隔离原则
