@@ -7,7 +7,7 @@ package top.treegrowth.designmodel.mediator;
 public abstract class Colleague {
 
     protected Mediator mediator;
-    //强制子类必须注入
+    //强制子类必须注入，因为没有空的构造方法了
     public Colleague(Mediator mediator) {
         this.mediator = mediator;
     }

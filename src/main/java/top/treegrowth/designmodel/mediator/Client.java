@@ -2,6 +2,7 @@ package top.treegrowth.designmodel.mediator;
 
 /**
  *
+ * 中介者模式
  *
  * 单一职责原则
  * 依赖倒置原则
