@@ -3,6 +3,14 @@ package top.treegrowth.designmodel.flyweight;
 import java.util.Date;
 
 /**
+ *
+ * 单一职责原则
+ * 依赖倒置原则
+ * 接口隔离原则
+ * 迪米特原则
+ * 里氏替换原则
+ * 开闭原则
+ *
  * 享元模式
  *
  * @author wusi

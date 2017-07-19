@@ -2,6 +2,14 @@ package top.treegrowth.designmodel.factory.abstract_factory;
 
 /**
  *
+ *
+ * 单一职责原则
+ * 依赖倒置原则
+ * 接口隔离原则
+ * 迪米特原则
+ * 里氏替换原则
+ * 开闭原则
+ *
  * 抽象工厂客户端
  *
  * @author wusi
