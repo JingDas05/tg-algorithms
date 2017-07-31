@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class Utils implements Serializable{
 
-    public static void exch(Object[] source, int i, int j) {
+    public static void exchange(Object[] source, int i, int j) {
         Object temp = source[i];
         source[i] = source[j];
         source[j] = temp;
