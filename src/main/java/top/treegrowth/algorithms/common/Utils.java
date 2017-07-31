@@ -6,10 +6,10 @@ import java.io.Serializable;
  * @author wusi
  * @version 20170212
  */
-public class Utils implements Serializable{
+public class Utils implements Serializable {
 
-    public static void exchange(Object[] source, int i, int j) {
-        Object temp = source[i];
+    public static void exchange(Comparable[] source, int i, int j) {
+        Comparable temp = source[i];
         source[i] = source[j];
         source[j] = temp;
     }
@@ -22,4 +22,9 @@ public class Utils implements Serializable{
         return i.compareTo(j) > 0;
     }
 
+    public static void print(Object[] source) {
+        for (Object each : source) {
+            System.out.println("" + each.toString());
+        }
+    }
 }
