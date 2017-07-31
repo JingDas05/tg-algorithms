@@ -24,7 +24,7 @@ public class InsertSort {
             t = a[i];
             // j 需要插入的位置
             j = i - 1;
-            // 移动（要插入的元素小于目标元素）
+            // 向左移动（要插入的元素小于目标元素）
             while (j >= 0 && t < a[j]) {
                 a[j + 1] = a[j];
                 j--;
