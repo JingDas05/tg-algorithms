@@ -16,7 +16,7 @@ import static top.treegrowth.algorithms.common.Utils.print;
  * @author wusi
  * @version 2017/7/31 8:57
  */
-public class ExchangeSort {
+public class ExchangeBubbleSort {
 
     // 较大的数往后冒泡
     public void bubbleSort(Comparable[] a) {

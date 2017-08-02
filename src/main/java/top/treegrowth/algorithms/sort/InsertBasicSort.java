@@ -14,7 +14,7 @@ import static jdk.nashorn.internal.objects.Global.print;
  * @author wusi
  * @version 2017/7/31 14:24
  */
-public class InsertSort {
+public class InsertBasicSort {
 
     // 增序排列
     public void insertionSort(int[] a) {

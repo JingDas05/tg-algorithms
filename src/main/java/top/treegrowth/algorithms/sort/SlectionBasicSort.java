@@ -14,7 +14,7 @@ import static top.treegrowth.algorithms.common.Utils.less;
  * @author wusi
  * @version 20170212
  */
-public class SlectionSort {
+public class SlectionBasicSort {
 
 
     /**
