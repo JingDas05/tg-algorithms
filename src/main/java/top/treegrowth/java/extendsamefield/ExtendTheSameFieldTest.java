@@ -11,7 +11,8 @@ public class ExtendTheSameFieldTest {
     @Test
     public void test() {
         ChildClass childClass = new ChildClass();
-
+        System.out.println(Integer.MAX_VALUE);
+        System.out.println(ChildClass.class.getName());
     }
 
     public class ChildClass extends ParentClass {
