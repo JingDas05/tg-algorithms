@@ -28,6 +28,7 @@ public class Client {
         System.out.println("========================="+"华丽的分割线"+"============================");
         // 第二种执行方法,获取代理object强转
         ISubject subject2 = new ConcreteSubject();
+        // 一定要注意，这个地方强转的时候，是接口ISubject，不是具体实现类ConcreteSubject
         ISubject forceDynamicProxy = (ISubject) new DynamicProxy(subject2).getProxy();
         forceDynamicProxy.doSomething("2222");
     }
