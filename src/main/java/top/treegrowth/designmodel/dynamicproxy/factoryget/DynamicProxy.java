@@ -18,7 +18,6 @@ public class DynamicProxy {
 
     public DynamicProxy(Object target) {
         this.target = target;
-        Class targetClazz = target.getClass();
         /**
          * 创建代理类
          * @param 类加载器，获取被代理对象的类加载器
@@ -26,11 +25,13 @@ public class DynamicProxy {
          * @param 代理处理器，代理类执行的时候执行的处理器
          * */
         this.proxy = Proxy.newProxyInstance(
-                targetClazz.getClassLoader(),
-                targetClazz.getInterfaces(),
+                target.getClass().getClassLoader(),
+                target.getClass().getInterfaces(),
                 new MyInvokeHandler(target));
     }
 
+    // 这个方法只是为了验证代理对象执行方法时的前置和后置通知
+    // 用到了反射
     public Object exec(String methodName, Object... args) throws NoSuchMethodException {
         Object result = null;
         //参数为Class类型
@@ -55,6 +56,7 @@ public class DynamicProxy {
      * */
     class MyInvokeHandler implements InvocationHandler {
 
+        // 要代理的对象
         private Object target;
 
         public MyInvokeHandler(Object target) {
@@ -86,5 +88,9 @@ public class DynamicProxy {
         public void after() {
             System.out.println("执行after方法");
         }
+    }
+
+    public Object getProxy() {
+        return proxy;
     }
 }

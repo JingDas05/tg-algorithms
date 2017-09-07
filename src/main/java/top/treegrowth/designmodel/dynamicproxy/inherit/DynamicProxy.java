@@ -15,6 +15,7 @@ public class DynamicProxy {
         if (true) {
             new BeforeAdvice().exec();
         }
+        // 这个地方用了一个强制类型转换
         return (T) Proxy.newProxyInstance(loader, interfaces, h);
     }
 }

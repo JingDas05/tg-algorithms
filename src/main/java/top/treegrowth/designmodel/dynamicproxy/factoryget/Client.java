@@ -1,9 +1,8 @@
 package top.treegrowth.designmodel.dynamicproxy.factoryget;
 
 /**
- *
  * 动态代理模式
- *
+ * <p>
  * 单一职责原则
  * 依赖倒置原则
  * 接口隔离原则
@@ -19,11 +18,17 @@ public class Client {
         Object result = null;
         ISubject subject = new ConcreteSubject();
         DynamicProxy dynamicProxy = new DynamicProxy(subject);
+        // 第一种执行方法
         String[] stringParam = {"1111"};
         try {
             result = dynamicProxy.exec("doSomething", stringParam);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+        System.out.println("========================="+"华丽的分割线"+"============================");
+        // 第二种执行方法,获取代理object强转
+        ISubject subject2 = new ConcreteSubject();
+        ISubject forceDynamicProxy = (ISubject) new DynamicProxy(subject2).getProxy();
+        forceDynamicProxy.doSomething("2222");
     }
 }
