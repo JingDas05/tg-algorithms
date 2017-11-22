@@ -32,7 +32,7 @@ public class Client {
                     + (System.currentTimeMillis() - begin));
             System.out.println(orderManager.getOrder(0).getClientName());
         } catch (Exception e) {
-            System.out.println("OrderManager exception: " + e);
+            System.out.println("OrderManager Exception: " + e);
         }
     }
 }

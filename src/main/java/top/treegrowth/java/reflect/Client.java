@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
  * @version 2017/10/11 7:22.
  */
 public class Client {
-
     public static void main(String[] args) throws Exception {
         Class<TargetClass> clazz = TargetClass.class;
         Method method = clazz.getMethod("method1", String.class);
