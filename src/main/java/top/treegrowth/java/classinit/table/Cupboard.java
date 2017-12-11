@@ -1,4 +1,4 @@
-package top.treegrowth.java.parentsub.table;
+package top.treegrowth.java.classinit.table;
 
 /**
  * @author wusi

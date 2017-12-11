@@ -22,7 +22,7 @@ public class ReenterLock implements Runnable{
     @Override
     public void run() {
         // TODO Auto-generated method stub
-        for (int j = 0; j < 1000; j++) {
+        for (int j = 0; j < 100000; j++) {
             lock.lock();
             try {
                 i++;

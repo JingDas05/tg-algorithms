@@ -1,4 +1,4 @@
-package top.treegrowth.java.parentsub.basic;
+package top.treegrowth.java.classinit.basic;
 
 /**
  * @author wusi
