@@ -1,6 +1,13 @@
 package top.treegrowth.java.classinit.basic;
 
 /**
+ *
+ *
+ * 程序构造顺序：
+ * 1 静态优先于非静态
+ * 2 父类优先于子类
+ * 3 成员变量和代码块优先于构造函数
+ *
  * @author wusi
  * @version 2017/12/3 21:48.
  */
