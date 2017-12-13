@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="showTab">
+
+</div>
+
+<script>
+
+    var string1 = "<要替换的字符";
+    var string2 = ">要替换的字符";
+
+    str1 = string1.replace(/</g, '〈');
+    str2 = string2.replace(/>/g, '〉');
+    show(str1)
+    show(str2)
+
+    function show(content) {
+        document.getElementById('showTab').innerHTML = content
+    }
+</script>
+</body>
+</html>
