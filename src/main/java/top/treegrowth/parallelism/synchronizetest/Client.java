@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadFactory;
 /**
  * @author wusi
  * @version 2017/9/23 16:56.
+ * synchronized关键字全类加锁
  */
 public class Client {
 
