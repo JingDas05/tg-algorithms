@@ -1,4 +1,4 @@
-package top.treegrowth.java.type;
+package top.treegrowth.java.generic;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
@@ -7,7 +7,8 @@ import java.util.List;
 
 /**
  *
- * 数组类型
+ * 数组类型， represents an array type whose component
+ * type is either a parameterized type or a type variable
  *
  * @author wusi
  * @version 2017/6/8 17:21

@@ -1,14 +1,18 @@
-package top.treegrowth.java.type;
+package top.treegrowth.java.generic;
 
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.WildcardType;
 import java.util.List;
 
 /**
- * 通配符泛型
+ * 通配符泛型，比如? extends Number 和 ? super Integer 它有如下方法:
+ * <p>
+ * Type[] getUpperBounds(): 获取范型变量的上界
+ * Type[] getLowerBounds(): 获取范型变量的下界
  *
  * @author wusi
  * @version 2017/6/8 17:23
@@ -17,6 +21,7 @@ import java.util.List;
 public class WildcardTypeTest {
     private List<? extends Number> a;  // // a没有下界, 取下界会抛出ArrayIndexOutOfBoundsException
     private List<? super String> b;
+
     public static void main(String[] args) throws Exception {
         Field fieldA = WildcardTypeTest.class.getDeclaredField("a");
         Field fieldB = WildcardTypeTest.class.getDeclaredField("b");

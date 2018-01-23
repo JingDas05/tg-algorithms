@@ -1,4 +1,4 @@
-package top.treegrowth.java.type;
+package top.treegrowth.java.generic;
 
 import org.springframework.util.Assert;
 
@@ -9,7 +9,7 @@ import java.lang.reflect.TypeVariable;
 
 /**
  *
- * 变量泛型
+ * 变量泛型，例如类和方法声明的泛型 <K extends Comparable & Serializable, V>等
  *
  * @author wusi
  * @version 2017/6/8 17:16

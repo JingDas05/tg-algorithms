@@ -1,4 +1,4 @@
-package top.treegrowth.java.type;
+package top.treegrowth.java.generic;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -6,7 +6,8 @@ import java.util.Map;
 
 /**
  *
- * 容器泛型
+ * 容器泛型,
+ * 包含泛型的参数，eg Map<String, String>, List<String>等
  *
  * @author wusi
  * @version 2017/6/8 17:00
