@@ -3,6 +3,7 @@ package top.treegrowth;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author wusi
@@ -16,7 +17,6 @@ public class BootStrapApp {
     }
 
     public class Start implements CommandLineRunner {
-
         @Override
         public void run(String... strings) throws Exception {
             System.out.println("项目启动时，本方法会执行");
