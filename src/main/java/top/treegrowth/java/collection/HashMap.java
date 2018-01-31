@@ -334,6 +334,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
      */
     static final int hash(Object key) {
         int h;
+        // 高16位 参与 hash
         return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
     }
 
@@ -375,6 +376,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
 
     /**
      * Returns a power of two size for the given target capacity.
+     * 返回接近所给cap的偶数， eg:31 变成32
      */
     static final int tableSizeFor(int cap) {
         int n = cap - 1;
@@ -689,23 +691,37 @@ public class HashMap<K, V> extends AbstractMap<K, V>
      * @return the table
      */
     final HashMap.Node<K, V>[] resize() {
+        // 暂存table
         HashMap.Node<K, V>[] oldTab = table;
+        // 获取 oldTable 的 容量
         int oldCap = (oldTab == null) ? 0 : oldTab.length;
+        // 获取 oldTable 的 阈值
         int oldThr = threshold;
+        // 初始化新的table 的 容量 和 阈值
         int newCap, newThr = 0;
+        // 处理oldTable有值的情况
         if (oldCap > 0) {
+            // 如果已经超过最大容量了，直接返回旧table,无法扩容
             if (oldCap >= MAXIMUM_CAPACITY) {
                 threshold = Integer.MAX_VALUE;
                 return oldTab;
-            } else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
+            }
+            // 扩容，旧容量×2
+            else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
                     oldCap >= DEFAULT_INITIAL_CAPACITY)
+                // 如果新的容量小于最大容量且旧容量不小于默认容量16，那么就将新阈值等于两倍的旧阈值
                 newThr = oldThr << 1; // double threshold
-        } else if (oldThr > 0) // initial capacity was placed in threshold
+        } else if (oldThr > 0)
+            // initial capacity was placed in threshold
+            // 处理oldTable 没有值，但是阈值大于0的情况
             newCap = oldThr;
-        else {               // zero initial threshold signifies using defaults
+        else {
+            // zero initial threshold signifies using defaults
+            // 处理 oldTable 没有值，且阈值为0的情况，也即初始化默认容量16，阈值12
             newCap = DEFAULT_INITIAL_CAPACITY;
             newThr = (int) (DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
         }
+        // 处理阈值为0的情况，如果容量取min(容量*负载因子,最大整数)
         if (newThr == 0) {
             float ft = (float) newCap * loadFactor;
             newThr = (newCap < MAXIMUM_CAPACITY && ft < (float) MAXIMUM_CAPACITY ?

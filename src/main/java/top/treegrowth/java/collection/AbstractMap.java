@@ -348,8 +348,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
                     return top.treegrowth.java.collection.AbstractMap.this.containsKey(k);
                 }
             };
-            keySet = ks;
-        }
+
+        }      keySet = ks;
         return ks;
     }
 
