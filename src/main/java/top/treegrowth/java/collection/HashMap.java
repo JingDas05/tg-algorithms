@@ -628,21 +628,29 @@ public class HashMap<K, V> extends AbstractMap<K, V>
     final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
                    boolean evict) {
         HashMap.Node<K, V>[] tab;
+        // hash位置的node
         HashMap.Node<K, V> p;
         int n, i;
         if ((tab = table) == null || (n = tab.length) == 0)
             n = (tab = resize()).length;
+        // hash 对 数组长度取模确定
         if ((p = tab[i = (n - 1) & hash]) == null)
             tab[i] = newNode(hash, key, value, null);
         else {
+            // 处理key存在的情况
+            // 暂存node
             HashMap.Node<K, V> e;
+            // 保存hash位置node的K
             K k;
             if (p.hash == hash &&
                     ((k = p.key) == key || (key != null && key.equals(k))))
+                // 处理节点的情况
                 e = p;
             else if (p instanceof HashMap.TreeNode)
+                // 处理红黑树的结构
                 e = ((HashMap.TreeNode<K, V>) p).putTreeVal(this, tab, hash, key, value);
             else {
+                // 处理链表的情况
                 for (int binCount = 0; ; ++binCount) {
                     if ((e = p.next) == null) {
                         p.next = newNode(hash, key, value, null);
@@ -815,7 +823,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
      * @return the node, or null if none
      */
     final HashMap.Node<K, V> removeNode(int hash, Object key, Object value,
-                                                  boolean matchValue, boolean movable) {
+                                        boolean matchValue, boolean movable) {
         HashMap.Node<K, V>[] tab;
         HashMap.Node<K, V> p;
         int n, index;
@@ -2033,7 +2041,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
          * Tree version of putVal.
          */
         final HashMap.TreeNode<K, V> putTreeVal(HashMap<K, V> map, HashMap.Node<K, V>[] tab,
-                                                          int h, K k, V v) {
+                                                int h, K k, V v) {
             Class<?> kc = null;
             boolean searched = false;
             HashMap.TreeNode<K, V> root = (parent != null) ? root() : this;
@@ -2244,7 +2252,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         // Red-black tree methods, all adapted from CLR
 
         static <K, V> HashMap.TreeNode<K, V> rotateLeft(HashMap.TreeNode<K, V> root,
-                                                                  HashMap.TreeNode<K, V> p) {
+                                                        HashMap.TreeNode<K, V> p) {
             HashMap.TreeNode<K, V> r, pp, rl;
             if (p != null && (r = p.right) != null) {
                 if ((rl = p.right = r.left) != null)
@@ -2262,7 +2270,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         }
 
         static <K, V> HashMap.TreeNode<K, V> rotateRight(HashMap.TreeNode<K, V> root,
-                                                                   HashMap.TreeNode<K, V> p) {
+                                                         HashMap.TreeNode<K, V> p) {
             HashMap.TreeNode<K, V> l, pp, lr;
             if (p != null && (l = p.left) != null) {
                 if ((lr = p.left = l.right) != null)
@@ -2280,7 +2288,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         }
 
         static <K, V> HashMap.TreeNode<K, V> balanceInsertion(HashMap.TreeNode<K, V> root,
-                                                                        HashMap.TreeNode<K, V> x) {
+                                                              HashMap.TreeNode<K, V> x) {
             x.red = true;
             for (HashMap.TreeNode<K, V> xp, xpp, xppl, xppr; ; ) {
                 if ((xp = x.parent) == null) {
@@ -2331,7 +2339,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         }
 
         static <K, V> HashMap.TreeNode<K, V> balanceDeletion(HashMap.TreeNode<K, V> root,
-                                                                       HashMap.TreeNode<K, V> x) {
+                                                             HashMap.TreeNode<K, V> x) {
             for (HashMap.TreeNode<K, V> xp, xpl, xpr; ; ) {
                 if (x == null || x == root)
                     return root;
