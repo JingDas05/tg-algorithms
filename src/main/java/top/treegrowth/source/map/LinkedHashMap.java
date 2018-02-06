@@ -1,14 +1,26 @@
-package top.treegrowth.java.collection;
+package top.treegrowth.source.map;
 
 /**
  * @author wusi
  * @version 2018/1/24 9:37
  */
-import java.util.*;
-import java.util.function.Consumer;
+
+import java.io.IOException;
+import java.util.AbstractCollection;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.ConcurrentModificationException;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.io.IOException;
+import java.util.function.Consumer;
 
 /**
  * <p>Hash table and linked list implementation of the <tt>Map</tt> interface,

@@ -1,4 +1,4 @@
-package top.treegrowth.java.collection;
+package top.treegrowth.source.map;
 
 /**
  * @author wusi
@@ -266,7 +266,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
      * Basic hash bin node, used for most entries.  (See below for
      * TreeNode subclass, and in LinkedHashMap for its Entry subclass.)
      */
-    static class Node<K, V> implements Map.Entry<K, V> {
+    static class Node<K, V> implements Entry<K, V> {
         final int hash;
         final K key;
         V value;
@@ -305,7 +305,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
             if (o == this)
                 return true;
             if (o instanceof Map.Entry) {
-                Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+                Entry<?, ?> e = (Entry<?, ?>) o;
                 if (Objects.equals(key, e.getKey()) &&
                         Objects.equals(value, e.getValue()))
                     return true;
@@ -511,7 +511,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                     threshold = tableSizeFor(t);
             } else if (s > threshold)
                 resize();
-            for (Map.Entry<? extends K, ? extends V> e : m.entrySet()) {
+            for (Entry<? extends K, ? extends V> e : m.entrySet()) {
                 K key = e.getKey();
                 V value = e.getValue();
                 putVal(hash(key), key, value, false, evict);
@@ -633,20 +633,22 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         // hash位置的node
         HashMap.Node<K, V> p;
         int n, i;
+        // 如果 table为空或者长度为0
         if ((tab = table) == null || (n = tab.length) == 0)
+            // 扩容
             n = (tab = resize()).length;
-        // hash 对 数组长度取模确定
+        // 根据hash计算table索引位置，如果当前位置为空，直接新建赋值
         if ((p = tab[i = (n - 1) & hash]) == null)
             tab[i] = newNode(hash, key, value, null);
         else {
-            // 处理key存在的情况
-            // 暂存node
+            // 处理hash碰撞的情况
+            // 暂存节点，e 为最终要处理的节点
             HashMap.Node<K, V> e;
             // 保存hash位置node的K
             K k;
             if (p.hash == hash &&
                     ((k = p.key) == key || (key != null && key.equals(k))))
-                // 处理节点的情况
+                // 如果hash相等，且key值相等，e指向已存节点
                 e = p;
             else if (p instanceof HashMap.TreeNode)
                 // 处理红黑树的结构
@@ -654,27 +656,38 @@ public class HashMap<K, V> extends AbstractMap<K, V>
             else {
                 // 处理链表的情况
                 for (int binCount = 0; ; ++binCount) {
+                    // 处理到队尾的情况并且e赋值
                     if ((e = p.next) == null) {
+                        // 在队尾追加节点
                         p.next = newNode(hash, key, value, null);
+                        // 如果发现链表长度大于8，树化
                         if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
                             treeifyBin(tab, hash);
                         break;
                     }
+                    // 如果链表中已经存在，则返回
                     if (e.hash == hash &&
                             ((k = e.key) == key || (key != null && key.equals(k))))
                         break;
+                    // 继续遍历下一个节点
                     p = e;
                 }
             }
-            if (e != null) { // existing mapping for key
+            // existing mapping for key
+            if (e != null) {
+                // 暂存旧值
                 V oldValue = e.value;
+                // 如果不是非空赋值或者旧值为null,进行赋值
                 if (!onlyIfAbsent || oldValue == null)
                     e.value = value;
+                // hook方法，提供插入元素后回调
                 afterNodeAccess(e);
                 return oldValue;
             }
         }
+        // 修改 modCount 加1
         ++modCount;
+        // 增加size,如果大于阈值，扩容
         if (++size > threshold)
             resize();
         afterNodeInsertion(evict);
@@ -721,31 +734,49 @@ public class HashMap<K, V> extends AbstractMap<K, V>
             newCap = DEFAULT_INITIAL_CAPACITY;
             newThr = (int) (DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
         }
-        // 处理阈值为0的情况，如果容量取min(容量*负载因子,最大整数)
+        // 处理阈值为0的情况，如果新容量以及新容量的阈值小于最大容量 取新容量的阈值，否则取最大整数
         if (newThr == 0) {
             float ft = (float) newCap * loadFactor;
             newThr = (newCap < MAXIMUM_CAPACITY && ft < (float) MAXIMUM_CAPACITY ?
                     (int) ft : Integer.MAX_VALUE);
         }
+        // 赋值当前阈值
         threshold = newThr;
+        // 创建新table,长度为新容量
         @SuppressWarnings({"rawtypes", "unchecked"})
         HashMap.Node<K, V>[] newTab = (HashMap.Node<K, V>[]) new HashMap.Node[newCap];
+        // 赋值当前table
         table = newTab;
+        // 复制扩容
         if (oldTab != null) {
+            // 循环遍历旧数组
             for (int j = 0; j < oldCap; ++j) {
+                // 暂存Node节点
                 HashMap.Node<K, V> e;
+                // 赋值判断，如果不为空进行处理
                 if ((e = oldTab[j]) != null) {
+                    // 释放旧table引用
                     oldTab[j] = null;
                     if (e.next == null)
+                        // 如果节点为单节点(没有子节点)，重新hash，置入新table。hash规则：取节点hash对table长度取模，由于
+                        // e.hash & (newCap - 1)计算，所以table的长度必须为偶数
                         newTab[e.hash & (newCap - 1)] = e;
                     else if (e instanceof HashMap.TreeNode)
+                        // 如果节点为树节点，进行以下处理
                         ((HashMap.TreeNode<K, V>) e).split(this, newTab, j, oldCap);
-                    else { // preserve order
+                    else {
+                        // preserve order
+                        // 如果节点有子节点，也即链表结构，进行以下处理
+                        // 定义节点变量
                         HashMap.Node<K, V> loHead = null, loTail = null;
                         HashMap.Node<K, V> hiHead = null, hiTail = null;
+                        // 暂存节点
                         HashMap.Node<K, V> next;
+                        // 遍历链表进行操作
                         do {
+                            // 暂存e的子节点
                             next = e.next;
+                            // 对
                             if ((e.hash & oldCap) == 0) {
                                 if (loTail == null)
                                     loHead = e;
@@ -1062,12 +1093,12 @@ public class HashMap<K, V> extends AbstractMap<K, V>
      *
      * @return a set view of the mappings contained in this map
      */
-    public Set<Map.Entry<K, V>> entrySet() {
-        Set<Map.Entry<K, V>> es;
+    public Set<Entry<K, V>> entrySet() {
+        Set<Entry<K, V>> es;
         return (es = entrySet) == null ? (entrySet = new HashMap.EntrySet()) : es;
     }
 
-    final class EntrySet extends AbstractSet<Map.Entry<K, V>> {
+    final class EntrySet extends AbstractSet<Entry<K, V>> {
         public final int size() {
             return size;
         }
@@ -1076,14 +1107,14 @@ public class HashMap<K, V> extends AbstractMap<K, V>
             HashMap.this.clear();
         }
 
-        public final Iterator<Map.Entry<K, V>> iterator() {
+        public final Iterator<Entry<K, V>> iterator() {
             return new HashMap.EntryIterator();
         }
 
         public final boolean contains(Object o) {
             if (!(o instanceof Map.Entry))
                 return false;
-            Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+            Entry<?, ?> e = (Entry<?, ?>) o;
             Object key = e.getKey();
             HashMap.Node<K, V> candidate = getNode(hash(key), key);
             return candidate != null && candidate.equals(e);
@@ -1091,7 +1122,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
 
         public final boolean remove(Object o) {
             if (o instanceof Map.Entry) {
-                Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+                Entry<?, ?> e = (Entry<?, ?>) o;
                 Object key = e.getKey();
                 Object value = e.getValue();
                 return removeNode(hash(key), key, value, true, true) != null;
@@ -1099,11 +1130,11 @@ public class HashMap<K, V> extends AbstractMap<K, V>
             return false;
         }
 
-        public final Spliterator<Map.Entry<K, V>> spliterator() {
+        public final Spliterator<Entry<K, V>> spliterator() {
             return new HashMap.EntrySpliterator<>(HashMap.this, 0, -1, 0, 0);
         }
 
-        public final void forEach(Consumer<? super Map.Entry<K, V>> action) {
+        public final void forEach(Consumer<? super Entry<K, V>> action) {
             HashMap.Node<K, V>[] tab;
             if (action == null)
                 throw new NullPointerException();
@@ -1553,8 +1584,8 @@ public class HashMap<K, V> extends AbstractMap<K, V>
     }
 
     final class EntryIterator extends HashMap.HashIterator
-            implements Iterator<Map.Entry<K, V>> {
-        public final Map.Entry<K, V> next() {
+            implements Iterator<Entry<K, V>> {
+        public final Entry<K, V> next() {
             return nextNode();
         }
     }
@@ -1741,7 +1772,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
 
     static final class EntrySpliterator<K, V>
             extends HashMap.HashMapSpliterator<K, V>
-            implements Spliterator<Map.Entry<K, V>> {
+            implements Spliterator<Entry<K, V>> {
         EntrySpliterator(HashMap<K, V> m, int origin, int fence, int est,
                          int expectedModCount) {
             super(m, origin, fence, est, expectedModCount);
@@ -1754,7 +1785,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                             expectedModCount);
         }
 
-        public void forEachRemaining(Consumer<? super Map.Entry<K, V>> action) {
+        public void forEachRemaining(Consumer<? super Entry<K, V>> action) {
             int i, hi, mc;
             if (action == null)
                 throw new NullPointerException();
@@ -1782,7 +1813,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
             }
         }
 
-        public boolean tryAdvance(Consumer<? super Map.Entry<K, V>> action) {
+        public boolean tryAdvance(Consumer<? super Entry<K, V>> action) {
             int hi;
             if (action == null)
                 throw new NullPointerException();

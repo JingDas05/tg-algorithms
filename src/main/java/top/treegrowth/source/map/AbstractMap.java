@@ -1,4 +1,4 @@
-package top.treegrowth.java.collection;
+package top.treegrowth.source.map;
 
 /**
  * @author wusi
@@ -119,7 +119,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
      * implementations will override this method.
      */
     public boolean containsKey(Object key) {
-        Iterator<Map.Entry<K, V>> i = entrySet().iterator();
+        Iterator<Entry<K, V>> i = entrySet().iterator();
         if (key == null) {
             while (i.hasNext()) {
                 Entry<K, V> e = i.next();
@@ -247,7 +247,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
      * the <tt>put</tt> operation and the specified map is nonempty.
      */
     public void putAll(Map<? extends K, ? extends V> m) {
-        for (Map.Entry<? extends K, ? extends V> e : m.entrySet())
+        for (Entry<? extends K, ? extends V> e : m.entrySet())
             put(e.getKey(), e.getValue());
     }
 
@@ -333,19 +333,19 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
                 }
 
                 public int size() {
-                    return top.treegrowth.java.collection.AbstractMap.this.size();
+                    return AbstractMap.this.size();
                 }
 
                 public boolean isEmpty() {
-                    return top.treegrowth.java.collection.AbstractMap.this.isEmpty();
+                    return AbstractMap.this.isEmpty();
                 }
 
                 public void clear() {
-                    top.treegrowth.java.collection.AbstractMap.this.clear();
+                    AbstractMap.this.clear();
                 }
 
                 public boolean contains(Object k) {
-                    return top.treegrowth.java.collection.AbstractMap.this.containsKey(k);
+                    return AbstractMap.this.containsKey(k);
                 }
             };
 
@@ -391,19 +391,19 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
                 }
 
                 public int size() {
-                    return top.treegrowth.java.collection.AbstractMap.this.size();
+                    return AbstractMap.this.size();
                 }
 
                 public boolean isEmpty() {
-                    return top.treegrowth.java.collection.AbstractMap.this.isEmpty();
+                    return AbstractMap.this.isEmpty();
                 }
 
                 public void clear() {
-                    top.treegrowth.java.collection.AbstractMap.this.clear();
+                    AbstractMap.this.clear();
                 }
 
                 public boolean contains(Object v) {
-                    return top.treegrowth.java.collection.AbstractMap.this.containsValue(v);
+                    return AbstractMap.this.containsValue(v);
                 }
             };
             values = vals;
@@ -479,9 +479,9 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
      *
      * @return the hash code value for this map
      * @implSpec This implementation iterates over <tt>entrySet()</tt>, calling
-     * {@link Map.Entry#hashCode hashCode()} on each element (entry) in the
+     * {@link Entry#hashCode hashCode()} on each element (entry) in the
      * set, and adding up the results.
-     * @see Map.Entry#hashCode()
+     * @see Entry#hashCode()
      * @see Object#equals(Object)
      * @see Set#equals(Object)
      */
@@ -532,7 +532,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
      * @return a shallow copy of this map
      */
     protected Object clone() throws CloneNotSupportedException {
-        top.treegrowth.java.collection.AbstractMap<?, ?> result = (top.treegrowth.java.collection.AbstractMap<?, ?>) super.clone();
+        AbstractMap<?, ?> result = (AbstractMap<?, ?>) super.clone();
         result.keySet = null;
         result.values = null;
         return result;
@@ -651,7 +651,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
         public boolean equals(Object o) {
             if (!(o instanceof Map.Entry))
                 return false;
-            Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+            Entry<?, ?> e = (Entry<?, ?>) o;
             return eq(key, e.getKey()) && eq(value, e.getValue());
         }
 
@@ -781,7 +781,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
         public boolean equals(Object o) {
             if (!(o instanceof Map.Entry))
                 return false;
-            Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+            Entry<?, ?> e = (Entry<?, ?>) o;
             return eq(key, e.getKey()) && eq(value, e.getValue());
         }
 

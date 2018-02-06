@@ -1,15 +1,22 @@
-package top.treegrowth.java.collection;
+package top.treegrowth.source.map;
 
 /**
  * @author wusi
  * @version 2018/1/24 9:48
  */
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.ConcurrentModificationException;
+import java.util.Hashtable;
+import java.util.Objects;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.io.Serializable;
 
 /**
  * An object that maps keys to values.  A map cannot contain duplicate keys;
@@ -49,7 +56,7 @@ import java.io.Serializable;
  * <tt>UnsupportedOperationException</tt> if this map does not support the
  * operation.  If this is the case, these methods may, but are not required
  * to, throw an <tt>UnsupportedOperationException</tt> if the invocation would
- * have no effect on the map.  For example, invoking the {@link #putAll(top.treegrowth.java.collection.Map)}
+ * have no effect on the map.  For example, invoking the {@link #putAll(Map)}
  * method on an unmodifiable map may, but is not required to, throw the
  * exception if the map whose mappings are to be "superimposed" is empty.
  * <p>
@@ -273,7 +280,7 @@ public interface Map<K, V> {
      * @throws IllegalArgumentException      if some property of a key or value in
      *                                       the specified map prevents it from being stored in this map
      */
-    void putAll(top.treegrowth.java.collection.Map<? extends K, ? extends V> m);
+    void putAll(Map<? extends K, ? extends V> m);
 
     /**
      * Removes all of the mappings from this map (optional operation).
@@ -337,7 +344,7 @@ public interface Map<K, V> {
      *
      * @return a set view of the mappings contained in this map
      */
-    Set<top.treegrowth.java.collection.Map.Entry<K, V>> entrySet();
+    Set<Map.Entry<K, V>> entrySet();
 
     /**
      * A map entry (key-value pair).  The <tt>Map.entrySet</tt> method returns
@@ -349,7 +356,7 @@ public interface Map<K, V> {
      * modified after the entry was returned by the iterator, except through
      * the <tt>setValue</tt> operation on the map entry.
      *
-     * @see top.treegrowth.java.collection.Map#entrySet()
+     * @see Map#entrySet()
      * @since 1.2
      */
     interface Entry<K, V> {
@@ -436,41 +443,41 @@ public interface Map<K, V> {
         int hashCode();
 
         /**
-         * Returns a comparator that compares {@link top.treegrowth.java.collection.Map.Entry} in natural order on key.
+         * Returns a comparator that compares {@link Map.Entry} in natural order on key.
          * <p>
          * <p>The returned comparator is serializable and throws {@link
          * NullPointerException} when comparing an entry with a null key.
          *
          * @param <K> the {@link Comparable} type of then map keys
          * @param <V> the type of the map values
-         * @return a comparator that compares {@link top.treegrowth.java.collection.Map.Entry} in natural order on key.
+         * @return a comparator that compares {@link Map.Entry} in natural order on key.
          * @see Comparable
          * @since 1.8
          */
-        public static <K extends Comparable<? super K>, V> Comparator<top.treegrowth.java.collection.Map.Entry<K, V>> comparingByKey() {
-            return (Comparator<top.treegrowth.java.collection.Map.Entry<K, V>> & Serializable)
+        public static <K extends Comparable<? super K>, V> Comparator<Map.Entry<K, V>> comparingByKey() {
+            return (Comparator<Map.Entry<K, V>> & Serializable)
                     (c1, c2) -> c1.getKey().compareTo(c2.getKey());
         }
 
         /**
-         * Returns a comparator that compares {@link top.treegrowth.java.collection.Map.Entry} in natural order on value.
+         * Returns a comparator that compares {@link Map.Entry} in natural order on value.
          * <p>
          * <p>The returned comparator is serializable and throws {@link
          * NullPointerException} when comparing an entry with null values.
          *
          * @param <K> the type of the map keys
          * @param <V> the {@link Comparable} type of the map values
-         * @return a comparator that compares {@link top.treegrowth.java.collection.Map.Entry} in natural order on value.
+         * @return a comparator that compares {@link Map.Entry} in natural order on value.
          * @see Comparable
          * @since 1.8
          */
-        public static <K, V extends Comparable<? super V>> Comparator<top.treegrowth.java.collection.Map.Entry<K, V>> comparingByValue() {
-            return (Comparator<top.treegrowth.java.collection.Map.Entry<K, V>> & Serializable)
+        public static <K, V extends Comparable<? super V>> Comparator<Map.Entry<K, V>> comparingByValue() {
+            return (Comparator<Map.Entry<K, V>> & Serializable)
                     (c1, c2) -> c1.getValue().compareTo(c2.getValue());
         }
 
         /**
-         * Returns a comparator that compares {@link top.treegrowth.java.collection.Map.Entry} by key using the given
+         * Returns a comparator that compares {@link Map.Entry} by key using the given
          * {@link Comparator}.
          * <p>
          * <p>The returned comparator is serializable if the specified comparator
@@ -479,17 +486,17 @@ public interface Map<K, V> {
          * @param <K> the type of the map keys
          * @param <V> the type of the map values
          * @param cmp the key {@link Comparator}
-         * @return a comparator that compares {@link top.treegrowth.java.collection.Map.Entry} by the key.
+         * @return a comparator that compares {@link Map.Entry} by the key.
          * @since 1.8
          */
-        public static <K, V> Comparator<top.treegrowth.java.collection.Map.Entry<K, V>> comparingByKey(Comparator<? super K> cmp) {
+        public static <K, V> Comparator<Map.Entry<K, V>> comparingByKey(Comparator<? super K> cmp) {
             Objects.requireNonNull(cmp);
-            return (Comparator<top.treegrowth.java.collection.Map.Entry<K, V>> & Serializable)
+            return (Comparator<Map.Entry<K, V>> & Serializable)
                     (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
         }
 
         /**
-         * Returns a comparator that compares {@link top.treegrowth.java.collection.Map.Entry} by value using the given
+         * Returns a comparator that compares {@link Map.Entry} by value using the given
          * {@link Comparator}.
          * <p>
          * <p>The returned comparator is serializable if the specified comparator
@@ -498,12 +505,12 @@ public interface Map<K, V> {
          * @param <K> the type of the map keys
          * @param <V> the type of the map values
          * @param cmp the value {@link Comparator}
-         * @return a comparator that compares {@link top.treegrowth.java.collection.Map.Entry} by the value.
+         * @return a comparator that compares {@link Map.Entry} by the value.
          * @since 1.8
          */
-        public static <K, V> Comparator<top.treegrowth.java.collection.Map.Entry<K, V>> comparingByValue(Comparator<? super V> cmp) {
+        public static <K, V> Comparator<Map.Entry<K, V>> comparingByValue(Comparator<? super V> cmp) {
             Objects.requireNonNull(cmp);
-            return (Comparator<top.treegrowth.java.collection.Map.Entry<K, V>> & Serializable)
+            return (Comparator<Map.Entry<K, V>> & Serializable)
                     (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
         }
     }
@@ -533,7 +540,7 @@ public interface Map<K, V> {
      * {@link Object#hashCode}.
      *
      * @return the hash code value for this map
-     * @see top.treegrowth.java.collection.Map.Entry#hashCode()
+     * @see Map.Entry#hashCode()
      * @see Object#equals(Object)
      * @see #equals(Object)
      */
@@ -593,7 +600,7 @@ public interface Map<K, V> {
      */
     default void forEach(BiConsumer<? super K, ? super V> action) {
         Objects.requireNonNull(action);
-        for (top.treegrowth.java.collection.Map.Entry<K, V> entry : entrySet()) {
+        for (Map.Entry<K, V> entry : entrySet()) {
             K k;
             V v;
             try {
@@ -646,7 +653,7 @@ public interface Map<K, V> {
      */
     default void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
         Objects.requireNonNull(function);
-        for (top.treegrowth.java.collection.Map.Entry<K, V> entry : entrySet()) {
+        for (Map.Entry<K, V> entry : entrySet()) {
             K k;
             V v;
             try {
