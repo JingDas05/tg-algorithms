@@ -1,2 +1,8 @@
 server:
   port: 4567
+
+es:
+  cluster:
+    name: qa2elk
+    host: 127.0.0.1,172.24.80.90,172.24.80.91
+    port: 9300
