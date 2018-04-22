@@ -1,0 +1,2752 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--路径 http://muchong.com/bbs/-->
+    <meta charset="gbk"/>
+    <title> 小木虫论坛-学术科研互动平台</title>
+    <meta name="keywords" content="小木虫,论坛,木虫论坛,论文,投稿,考研,考博,学术,科研,期刊点评,论文投稿,论文润色,网络生活,出国留学"/>
+    <meta name="description" content="小木虫-学术科研互动平台，会员主要来自国内各大院校、科研院所的博硕士研究生，企业研发人员，这里拥有旺盛的人气、良好的交流氛围及广阔的交流空间，已成为聚集众多科研工作者的学术资源、经验交流平台。小木虫论坛秉承“为中国学术科研免费提供动力”宗旨，已成为国内最有人气的学术科研站！"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+    <link rel="shortcut icon" href="http://muchongimg.xmcimg.com/data/emuch_bbs_images/favicon.ico" type="image/x-icon"/>
+    <link rel="dns-prefetch" href="http://muchong.com/bbs/i.muchong.com"/>
+    <link rel="dns-prefetch" href="http://muchong.com/bbs/muchongavatar.xmcimg.com"/>
+    <link rel="dns-prefetch" href="http://muchong.com/bbs/muchongimg.xmcimg.com"/>
+    <link rel="dns-prefetch" href="http://muchong.com/bbs/image-ali.keyan.cc"/>
+    <link rel="dns-prefetch" href="http://muchong.com/bbs/yuyin.xmcimg.com"/>
+    <link rel="dns-prefetch" href="http://muchong.com/bbs/yuyincdn.xmcimg.com"/>
+
+    <script type="text/javascript" src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/js/qing/js/jquery.js"/>
+    <script type="text/javascript">jQuery.noConflict();  var XMC_GKEY="/小木虫/首页"; var clickok_hash='8b3896edf041a9bc6bb650cfe92dc4dd', cookiepre='', cookiedomain='.muchong.com', cookiepath='/',site_url="http://muchong.com/bbs/";</script>
+    <script type="text/javascript" src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/js/qing/js/jquery.select.js?15373250"/>
+    <link type="text/css" href="http://muchongimg.xmcimg.com/data/emuch_bbs_images/css/qing/css/global.css?1537325052" rel="stylesheet"/>
+    <!--[if IE]>
+    <script type="text/javascript" src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/js/qing/js/html5shiv.min.js?15373250"></script>
+    <![endif]-->
+    <script language="javascript" src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/js/script_ajax.js?15373250"/>
+    <script language="javascript" src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/js/common.js?153732503"/>
+    <script src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/js/qing/js/qing.js?15373250"/>
+    <script src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/js/global.js?15373250"/>
+    <script type="text/javascript" src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/js/layer/layer.js?15373250"/>
+    <base href="http://muchong.com/bbs/"/>
+</head>
+<body>
+<div id="append_parent"/>
+<div id="ajaxwaitid"/>
+<div id="show_forum_f" style="display:none;"/>
+<div class="bg">
+    <div class="showlogin" style="display: none;">
+        <div class="passver">
+            <form method="post">
+                <table width="100%">
+                    <tr>
+                        <td><input class="input_txt input_w200" type="password" name="password" placeholder="请输入登陆网站密码"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="hidden" name="passwordversubmit" value="1"/>
+                            <input type="button" name="loginsubmit" value="密码验证" class="xmc_Big_btn reg_button" onclick="PasswordVer();"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function PasswordVer(){
+            var data = jQuery("form").serializeArray();
+            jQuery.post("api.php?ac=passwordver&amp;in_xmc=1&amp;rd=" + Math.random(),data, function (result) {
+                if (result.code &gt; 0) {
+                    layer.msg(result.msg);
+                    return false;
+                } else if(result.code == 0) {
+                    layer.closeAll();
+                    showQrcode(result);
+                    return false;
+                }else{
+                    layer.msg(result.msg);
+                }
+            });
+        }
+        function showQrcode(obj){
+            var count = 1;
+            var check_login_qrcode = function(){
+                jQuery.get('http://muchong.com/bbs/api.php?ac=checkqrcode&amp;op=wxbind&amp;in_xmc=1&amp;qrid='+obj.res.qrid+'&amp;tt='+ Date.parse(new Date()), function(data){
+                    if(data.res.code == 2) {
+                        ga('send', 'event', 'qrcode', 'scan', 3302227);
+                        stat_aso('qrcode', 'scan', "wxsbind",3302227);
+                        var tt = jQuery("#qrcode").attr('tt');
+                        clearTimeout(tt);
+                        layer.closeAll();
+                        layer.msg("微信账绑定成功");
+                    } else {
+                        count++;
+                        if(count&gt;30){
+                            clearTimeout(jQuery("#qrcode").attr('tt'));
+                            layer.closeAll();
+                        } else {
+                            var tt = setTimeout(check_login_qrcode, count&gt;20 ? 6000 : 3000);
+                            jQuery("#qrcode").attr('tt', tt);
+                        }
+                    }
+                });
+            };
+
+            if(!obj.res.image){
+                var content = "&lt;div class='nodate'&gt;二维码获取失败,请关闭从新获取&lt;/div&gt;";
+            }else{
+                var content = "&lt;div&gt;&lt;span&gt;请用微信扫描二维码进行绑定账号&lt;/span&gt;&lt;img src="+obj.res.image+"&gt;&lt;/div&gt;";
+            }
+            layer.open({
+                type:1,
+                title: false,
+                shadeClose: false,
+                area: '500px',
+                content: "&lt;div class='showqrocde' style='height: 500px; text-align: center' id='qrcode' tt='0'&gt;"+content+"&lt;/div&gt;",
+                cancel : function(index){
+                    var tt = jQuery("#qrcode").attr('tt');
+                    if(tt) {
+                        clearTimeout(tt);
+                    }
+                    layer.closeAll();
+                }
+            });
+            if(obj.res.image){
+                var tt = setTimeout(check_login_qrcode, 5000);
+                jQuery("#qrcode").attr('tt', tt);
+            }
+
+            ga('send', 'event', 'qrcode', 'show', "3302227");
+            stat_aso('qrcode', 'show', "wxbind",3302227);
+        }
+
+        function bindWxAccont(){
+            layer.open({
+                type: 1,
+                title: "请先进行验证密码",
+                shadeClose: false,
+                shade: [0.6, '#000'],
+                area: ['400px', '200px'],
+                content: jQuery(".showlogin").html(),
+            });
+        }
+    </script>
+    <div class="top_Nav_Box solid">
+        <div class="wrapper_head solid">
+            <div class="xmc_fl">
+                <ul>
+                    <div class="xmc_fl">
+                        <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/portal/image/portal/logo.png?20163" style="display: none;"/>
+                        <li class="index" style="cursor: pointer"><a href="http://muchong.com/bbs/" class="logo" style="background: transparent;"><img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/qing/images/logo_new.png"/></a></li>
+                        <li class="tar_Down_Nav top_Down_Nav" style="margin-left: 10px;">
+                            <dl class="" id="default_bg">
+                                <dt class="xmc_nav">版块导航<em/></dt>
+                                <dd id="loadingnav">
+                                    <p class="xmc_lm20">正在加载中...</p>
+                                </dd>
+                            </dl>
+                        </li>
+
+
+                        <li class="tar_Down_Nav login_thread">
+                            <dl>
+                                <dt class="xmc_fnav">山河-0109<em/></dt>
+                                <dd id="loadingfnav">
+                                    <p class="xmc_lm20">正在加载中...</p>
+                                </dd>
+                            </dl>
+                        </li>
+
+                        <li><a href="http://muchong.com/bbs/post.php?action=newthread" style="">发新话题</a> </li>
+                        <li><a href="http://muchong.com/bbs/top.php" style="">热帖排行</a> </li>
+                        <li><a href="http://muchong.com/bbs/memcp.php?action=getcredit" style="">红包</a> </li>
+                        <li><a href="http://muchong.com/bbs/invite.php" style="">有奖邀请</a> </li>
+                        <li><a href="http://m.muchong.com/?f=nav&amp;w=bbs" target="_blank" style="color:yellow">APP下载</a> </li>
+                        <li><a href="http://hao.muchong.com/?f=muchong" style="" target="_blank">木虫导航</a> </li>
+                        <li><a href="http://lab.muchong.com/?f=muchong" style="" target="_blank">仪器共享</a> </li>
+                        <li><a href="http://paper.muchong.com/index.php?ac=polish&amp;f=nav&amp;w=bbs" target="_blank">论文服务</a> </li>
+                    </div>
+
+
+
+                </ul>
+            </div>
+
+
+            <div class="xmc_fr xmc_Search2">
+                <form class="xmc_fl" action="http://muchong.com/bbs/qing_search.php">
+                    <div class="xmc_fl">
+                        <input name="search_type" type="hidden" value="thread" id="inputselect"/>
+                        <input class="xmc_Search_Txt xmc_c9" type="text" name="wd" value="" placeholder="请输入用户名/关键字"/>
+                    </div>
+                    <div class="xmc_fl">
+                        <div id="divselect" class="divselect">
+                            <cite>帖子</cite>
+                            <ul class="select_x solid">
+                                <li><a href="javascript:;" selectid="thread">帖子</a></li>
+                                <li><a href="javascript:;" selectid="user">用户</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="xmc_fl">
+                        <input class="xmc_Search_Btn" type="submit" value="搜索"/>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div style="height: 50px;"/>
+
+
+    <!-- 请置于所有广告位代码之前 -->
+    <script type="text/javascript" src="http://z1hihu.xmcimg.com/js/m.js"/>
+
+
+
+    <div class="wrapper header_table">&#13;
+        <table cellspacing="0" cellpadding="0" align="center" border="0">&#13;
+            <tr>&#13;
+                <td><script type="text/javascript">
+                    var cpro_id = "u3210175";&#13;
+                </script>&#13;
+                    <script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"/></td>&#13;
+                <td align="right"/>&#13;
+                <td align="right"><div style="background-image:url(http://muchongimg.xmcimg.com/data/bcs/2016/0905/1_1473064859_424.gif); border: 0px solid #DDD; width:300px; height:60px;cursor:pointer;" onclick="location.href='http://muchong.com/bbs/a1751.html';">&#13;
+                </div></td>&#13;
+                <td align="right"><script type="text/javascript" src="http://zhihu.xmcimg.com/ksd9tj6um1.js"/></td>&#13;
+            </tr>&#13;
+        </table>&#13;
+    </div>&#13;
+    <div class="hr_10"/>&#13;
+    &#13;
+    <div class="wrapper" style=" background: #fff;border: 1px solid #9FC9EB;">&#13;
+        <div class="index_rank">&#13;
+            <h2 class="xmc_title xmc_blue"/><table width="100%">&#13;
+                <tr>&#13;
+                    <td><strong class="xmc_ft14 ">&#13;
+                        我的菜单    &#13;
+                        <a href="http://muchong.com/bbs/post.php?action=newthread&amp;from=myfnav"><span class="xmc_blue"><nobr>+自定义</nobr></span></a>&#13;
+                        <a href="http://muchong.com/bbs/myread.php#myfnav" style="font-weight: bold;"><nobr><span class="xmc_blue">（管理我的菜单）</span></nobr></a>&#13;
+                    </strong>&#13;
+                    </td>&#13;
+                    <td style="text-align: right;">&#13;
+                        <a href="http://muchong.com/bbs/a1763.html" class="" target="_blank" style="display: inherit!important;"><span style="padding-left:10px;font-weight:bold;color:red;">先丰纳米 买纳米材料就点这里</span></a></td>&#13;
+                </tr>&#13;
+            </table>&#13;
+            <div class="mymenu">&#13;
+                » <a href="http://muchong.com/bbs/post.php?action=newthread" style="font-weight:bold;">发表新主题</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/space.php?uid=3302227">我的主页</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/box.php">我的短消息</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/space.php?uid=3302227&amp;view=thread">我的话题</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/tag.php">我的研究方向</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/coupon.php?action=list">我的代金券</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/memcp.php">我的个人设置</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/search.php" target="_blank">站内搜索</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/star.php">搜索用户</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/membertop.php">用户排行</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/invite.php">有奖邀请好友</a> <span>|</span>&#13;
+                <a href="http://muchong.com/bbs/logging.php?action=logout&amp;t=1522758602">退出</a> <span>|</span>&#13;
+                <b style="color:red; cursor: pointer; font-size:14px;" onclick="bindWxAccont('3302227');"><img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/common/wechat_11.ico"/>绑定微信账号</b> <span> | </span>&#13;
+                <a href="http://muchong.com/bbs/space.php?uid=3302227">山河-0109</a>&#13;
+                (<a href="http://muchong.com/t-4375669-1"><font color="red"><u>金币: 1732.7</u></font></a> , <u>木虫</u> <a href="http://muchong.com/bbs/misc.php?action=updategroup" title="点击可以升级更新您的用户组哦">升级</a>)&#13;
+                &#13;
+            </div>&#13;
+            <ul class="solid" style="padding: 5px 0 5px 10px;">&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;fid=6"><nobr>休闲灌水</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;fid=126"><nobr>外语学习</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;fid=127"><nobr>考研</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;fid=133"><nobr>虫友互识</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;fid=166"><nobr>文学芳草园</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;fid=198"><nobr>硕博家园</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;fid=291"><nobr>第一性原理</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;ffid=259"><nobr>呆呆读书</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;fid=370"><nobr>机械</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/misc.php?action=idgo&amp;fid=312"><nobr>程序语言</nobr></a></li>&#13;
+                <li><span class="icon_rank">&gt;</span><a href="http://muchong.com/bbs/myread.php"><nobr>更多&gt;&gt;</nobr></a></li>&#13;
+            </ul>&#13;
+        </div>&#13;
+    </div>&#13;
+    <div class="hr_10"/>&#13;
+    &#13;
+    <div class="wrapper header_table">&#13;
+        <table cellspacing="0" cellpadding="0" align="center" border="0">&#13;
+            <tr align="center">&#13;
+                <td colspan="3">&#13;
+                    <a href="http://muchong.com/bbs/a2402.html" class="" target="_blank" style="display: inherit!important;"><img src="http://muchongimg.xmcimg.com/oss2/img/2018/0227/1_1519699264_186.jpg" align="middle"/></a></td>&#13;
+                <td/>&#13;
+                <td><a href="http://muchong.com/bbs/a1953.html" class="" target="_blank" style="display: inherit!important;"><img src="http://muchongimg.xmcimg.com/oss2/img/2018/0313/1_1520924611_530.gif" align="absmiddle" width="233" height="90"/></a></td>&#13;
+            </tr>&#13;
+            <tr>&#13;
+                <td align="left" width="253"><script type="text/javascript">
+                    &#13;
+                    var cpro_id = "u3195192";&#13;
+                </script>&#13;
+                    <script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"/></td>&#13;
+                <td align="center" width="253"><a href="http://muchong.com/bbs/a217.html" class="" target="_blank" style="display: inherit!important;"><img align="absmiddle" src="http://muchongimg.xmcimg.com//data/bcs/2014/0114/1_1389672826_882.gif"/></a></td>&#13;
+                <td align="right" width="254"><a href="http://muchong.com/bbs/a1052.html" class="" target="_blank" style="display: inherit!important;"><img align="absmiddle" src="http://muchongimg.xmcimg.com/data/bcs/2017/1017/1_1508215853_251.gif"/></a></td>&#13;
+                <td width="232"><a href="http://muchong.com/bbs/a2409.html" class="" target="_blank" style="display: inherit!important;"><img src="http://muchongimg.xmcimg.com/oss2/img/2018/0316/1_1521182206_867.gif" align="absmiddle" width="232" height="80"/></a></td>&#13;
+                <td width="233"><a href="http://muchong.com/bbs/a429.html" class="" target="_blank" style="display: inherit!important;"><img src="http://muchongimg.xmcimg.com/data/bcs/2016/0911/1_1473595038_423.gif" align="absmiddle" width="233" height="80"/></a></td>&#13;
+            </tr>&#13;
+        </table>&#13;
+    </div>&#13;
+    <div class="hr_10"/>&#13;
+
+    <div class="wrapper">
+        <div class="xmc_msearch">
+            <div class="xmc_search_text">
+            <span class="xmc_fr">共 4383467 篇主题<span class="xmc_cc">  /  </span>113271730 篇帖子
+            <span class="xmc_cc">  /  </span>8170702 位会员</span>
+                <span><a href="http://muchong.com/top-lastpost-1" target="_blank">查看新帖</a>            <span class="xmc_cc">  |  </span><a href="http://muchong.com/bbs/space.php?uid=3302227&amp;view=thread">我的话题</a>            <span class="xmc_cc">  |  </span><a href="http://muchong.com/top-hot-1">热门话题</a>
+            <span class="xmc_cc">  |  </span> 欢迎新会员 <a href="http://muchong.com/bbs/viewpro.php?username=a%CC%EC%CF%C2%CE%AA%B9%AB">a天下为公</a></span>
+            </div>
+        </div>
+
+        <div class="xmc_notice" onclick="$('winpop').style.display='none';"><span class="notice_icon"/><a href="http://muchong.com/bbs/space.php?uid=3302227&amp;view=note" target="_blank">现在有  562 个与你相关的提醒，快去看看吧</a></div>
+        <div class="hr_10"/>
+
+    </div>
+
+
+    <div class="wrapper">
+        <div class="forum_Post_index bg_global xmc_line_lr bg_global_padding">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">竞价推广 <span class="xmc_ft12">（<a href="http://muchong.com/bbs/creditshow.php">我要推广到这里</a>）</span></strong></h2>
+            <ul class="solid">
+                <li><em><nobr>1</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=26574" target="_blank"><span style="font-weight:bold;color:red;text-decoration:underline;">SCI新手成长策略——TopPaper润色服务（江湖传言：看此帖后写作功力大增，SCI顺利!）</span></a>
+                </li>
+                <li><em><nobr>2</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27721" target="_blank"><span style="font-weight:bold;color:red;text-decoration:underline;">SCI论文润色，就找EditSprings！欧美顶尖专家带来100%英语母语润色</span></a>
+                    <span class="viewcredit">+3</span>                </li>
+                <li><em><nobr>3</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=26509" target="_blank">[论文翻译+母语润色] 已在国外期刊成功发表论文3万余篇QQ/微信 1016604963</a>
+                </li>
+                <li><em><nobr>4</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27699" target="_blank">残余应力 纳米压痕/划痕 SEM 掠角XRD DSC FTIR 轮廓仪 维氏硬度 氩离子抛光 马弗炉</a>
+                </li>
+                <li><em><nobr>5</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27703" target="_blank"><span style="color:red;">【2018-6-1】论文推荐至英文EI（JA）SCI 核心期刊 必检索 提供翻译润色服务</span> <span style="background-color:red;color:#FFFFFF;padding:1px;">代金</span>  <span style="background-color:red;color:#FFFFFF;padding:1px;">送金</span> </a>
+                </li>
+                <li><em><nobr>6</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27431" target="_blank">供应金属掩膜板(shadow mask) 、光刻掩膜板、激光微细加工</a>
+                </li>
+                <li><em><nobr>7</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27498" target="_blank">SCI论文配图/科技绘图 专题培训 3月26-28日北京/4月18-20日上海 QQ4000703060</a>
+                </li>
+                <li><em><nobr>8</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27515" target="_blank"><span style="color:red;">优质计算机EI会议--2017届已检索，2018届如约而至</span> <span style="background-color:red;color:#FFFFFF;padding:1px;">代金</span> </a>
+                </li>
+                <li><em><nobr>9</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27590" target="_blank">本公司专业按需定制各种非标实验仪器设备及工装附件，欢迎咨询</a>
+                </li>
+                <li><em><nobr>10</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27686" target="_blank">技术服务：SSR/STR引物开发，RACE.DGGE菌种鉴定，高通量测序，荧光定量PCR等开具发票</a>
+                </li>
+                <li><em><nobr>11</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27691" target="_blank"><span style="color:red;">耐特译英文润色：《SCI论文写作第一步：如何获得可发表的idea？》精美PPT免费下载</span> <span style="background-color:red;color:#FFFFFF;padding:1px;">代金</span> </a>
+                </li>
+                <li><em><nobr>12</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27697" target="_blank">武汉一心一译，论文翻译与润色，实力老店，可开发票，关注公众号wuhanyxyy，享9折优惠</a>
+                </li>
+                <li><em><nobr>13</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27711" target="_blank">北京地文翻译科技有限公司-专注地球科学领域翻译</a>
+                </li>
+                <li><em><nobr>14</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27712" target="_blank">专业优质测试：XPS ICP SEM TEM XRD TGA BET GPC 核磁 压汞QQ:180161075</a>
+                </li>
+                <li><em><nobr>15</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27715" target="_blank">Biotage微波合成仪、快速制备色谱仪、快速蒸发系统</a>
+                </li>
+                <li><em><nobr>16</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27654" target="_blank"><span style="color:red;">耐特译英文润色,公众号关注礼包/会员折上折/会员积分卡/预存返现 四重优惠等你拿！</span> <span style="background-color:red;color:#FFFFFF;padding:1px;">代金</span> </a>
+                </li>
+                <li><em><nobr>17</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27665" target="_blank">优质严谨的SCI、EI文章翻译--学术专著翻译 -高性价比-可试译--北京誉文编辑</a>
+                </li>
+                <li><em><nobr>18</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27734" target="_blank"><span style="color:red;">FIB制备TEM样品、TEM SEM、XPS/UPS/AES、TG-MS/IR、Raman、PyGCMS、BET、高分辨MS测试</span> <span style="background-color:red;color:#FFFFFF;padding:1px;">代金</span> </a>
+                </li>
+                <li><em><nobr>19</nobr></em>
+                    <a href="http://muchong.com/bbs/creditshow.php?action=view&amp;logid=27731" target="_blank">【亚聚科技】XPS、FESEM、TEM、XRD(变温、薄膜应力织构）激光导热，TG-DSC。。。。</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="forum_Post_index bg_global xmc_line_lr bg_global_padding">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">论坛每日十大应助之星，欢迎应助专业学术问题来上榜 <span class="xmc_gray">(2018年04月02日排行)</span></strong></h2>
+            <ul class="solid">
+                <table width="96%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <tr>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=150213&amp;view=helpnum" target="_blank"><img src="http://muchongavatar.xmcimg.com/data/avatar/0e/7e/150213.jpg" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=150213&amp;view=helpnum" target="_blank">czyzsu</a></p>
+                                <p class="xmc_gray">15个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=150213&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=2988222&amp;view=helpnum" target="_blank"><img src="http://muchongavatar.xmcimg.com/data/avatar/cd/cf/2988222_1487433135.jpg" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=2988222&amp;view=helpnum" target="_blank">9号77</a></p>
+                                <p class="xmc_gray">10个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=2988222&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=827383&amp;view=helpnum" target="_blank"><img src="http://muchongimg.xmcimg.com/oss2/avatar/a0/b9/827383_1518749182.jpg" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=827383&amp;view=helpnum" target="_blank">nono2009</a></p>
+                                <p class="xmc_gray">9个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=827383&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=3774894&amp;view=helpnum" target="_blank"><img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/noavatar.gif" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=3774894&amp;view=helpnum" target="_blank">初次见面</a></p>
+                                <p class="xmc_gray">7个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=3774894&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=3437295&amp;view=helpnum" target="_blank"><img src="http://muchongavatar.xmcimg.com/data/avatar/18/34/3437295_1468374857.png" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=3437295&amp;view=helpnum" target="_blank">Gamry-电化学</a></p>
+                                <p class="xmc_gray">4个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=3437295&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=3264421&amp;view=helpnum" target="_blank"><img src="http://muchongavatar.xmcimg.com/data/avatar/5d/43/3264421_1504938278.jpg" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=3264421&amp;view=helpnum" target="_blank">Amber-xyz</a></p>
+                                <p class="xmc_gray">4个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=3264421&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=452307&amp;view=helpnum" target="_blank"><img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/avatars/14.gif" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=452307&amp;view=helpnum" target="_blank">shaoling988</a></p>
+                                <p class="xmc_gray">4个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=452307&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=768329&amp;view=helpnum" target="_blank"><img src="http://muchongavatar.xmcimg.com/data/avatar/e0/e7/768329_1448948050.jpg" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=768329&amp;view=helpnum" target="_blank">jy1230910</a></p>
+                                <p class="xmc_gray">3个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=768329&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=2126699&amp;view=helpnum" target="_blank"><img src="http://muchongavatar.xmcimg.com/data/avatar/12/22/2126699.jpg" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=2126699&amp;view=helpnum" target="_blank">nangua48</a></p>
+                                <p class="xmc_gray">3个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=2126699&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                        <td align="center" valign="bottom">
+                            <div class="avatar"><a href="http://muchong.com/bbs/space.php?uid=149259&amp;view=helpnum" target="_blank"><img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/avatars/14.gif" width="80" height="80"/></a></div>
+                            <div class="xmc_star_data">
+                                <p><a href="http://muchong.com/bbs/space.php?uid=149259&amp;view=helpnum" target="_blank">hawk5050</a></p>
+                                <p class="xmc_gray">3个应助</p>
+                                <p><a href="http://muchong.com/bbs/misc.php?action=myread&amp;id=149259&amp;idtype=authorid" target="_blank" class="xmc_ta">关注TA</a></p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </ul>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="forum_Post_index bg_global xmc_line_lr bg_global_padding">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14"><a href="http://muchong.com/top-me-1" class="xmc_blue">您感兴趣的专业知识帖导读</a><span class="xmc_ft12"> [ <a href="http://muchong.com/top-me#setting-1" class="xmc_blue xmc_ft12">更改版块</a> ]</span></strong></h2>
+            <ul class="solid">
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_11891825"/>
+                    [<a href="http://muchong.com/f-370-1" target="_blank"><font color="red">机械</font></a>]
+                    [<font color="green">求助</font>]
+                    <a href="http://muchong.com/t-11891825-1" target="_blank" onclick="myread_set(11891825)" title="小波包">小波包...</a>
+                    <span class="xmc_gray">1次回复</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_11891693"/>
+                    [<a href="http://muchong.com/f-370-1" target="_blank"><font color="red">机械</font></a>]
+                    <a href="http://muchong.com/t-11891693-1" target="_blank" onclick="myread_set(11891693)" title="【讨论】UG,CREO,SOLIDWORKS,CATIA让你最喜欢和最痛恨的地方">【讨论】UG,CREO,SOLIDWORKS,CATIA让你最喜欢和最痛恨的地 ...</a>
+                    <span class="xmc_gray">1次回复</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_11890579"/>
+                    [<a href="http://muchong.com/f-370-1" target="_blank"><font color="red">机械</font></a>]
+                    [<font color="green">求助</font>]
+                    <a href="http://muchong.com/t-11890579-1" target="_blank" onclick="myread_set(11890579)" title="用workbench做一个静力学分析，怎么施加径向力">用workbench做一个静力学分析，怎么施加径向力...</a>
+                    <span class="xmc_gray">2次回复</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_11887997"/>
+                    [<a href="http://muchong.com/f-370-1" target="_blank"><font color="red">机械</font></a>]
+                    [<font color="green">求助</font>]
+                    <a href="http://muchong.com/t-11887997-1" target="_blank" onclick="myread_set(11887997)" title="不同材料零件作为整理优化建模">不同材料零件作为整理优化建模...</a>
+                    <span class="xmc_gray">2次回复</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_11887073"/>
+                    [<a href="http://muchong.com/f-370-1" target="_blank"><font color="red">机械</font></a>]
+                    <a href="http://muchong.com/t-11887073-1" target="_blank" onclick="myread_set(11887073)" title="一大波SolidWorks资源、优秀模型来袭">一大波SolidWorks资源、优秀模型来袭...</a>
+                    <span class="xmc_gray">11次回复</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_11887052"/>
+                    [<a href="http://muchong.com/f-370-1" target="_blank"><font color="red">机械</font></a>]
+                    [<font color="green">求助</font>]
+                    <a href="http://muchong.com/t-11887052-1" target="_blank" onclick="myread_set(11887052)" title="大垫圈硬度超过标准了还能用吗？">大垫圈硬度超过标准了还能用吗？...</a>
+                    <span class="xmc_gray">1次回复</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_11883041"/>
+                    [<a href="http://muchong.com/f-370-1" target="_blank"><font color="red">机械</font></a>]
+                    <a href="http://muchong.com/t-11883041-1" target="_blank" onclick="myread_set(11883041)" title="求大神解答hypermesh报错问题">求大神解答hypermesh报错问题...</a>
+                    <span class="xmc_gray">1次回复</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_11882999"/>
+                    [<a href="http://muchong.com/f-370-1" target="_blank"><font color="red">机械</font></a>]
+                    <a href="http://muchong.com/t-11882999-1" target="_blank" onclick="myread_set(11882999)" title="无油压缩空气">无油压缩空气...</a>
+                    <span class="xmc_gray">3次回复</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="forum_Post_index bg_global xmc_line_lr b&#10;bal_padding">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">同研究方向广播（<a href="http://muchong.com/bbs/tag.php">查看更多</a>）</strong></h2>
+            <ul class="solid">
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12227429"/>
+                    <a href="http://muchong.com/t-12227429-1" target="_blank" onclick="myread_set(12227429)">麦考瑞大学全奖博士生怎么样...</a>
+                    <span style="color:gray;">10次回复</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12224644"/>
+                    <a href="http://muchong.com/t-12224644-1" target="_blank" onclick="myread_set(12224644)">感觉被坑了，心情从地狱到天堂又回到地狱...</a>
+                    <span style="color:gray;">29次回复</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="forum_Post_index bg_global xmc_line_lr bg_global_padding">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">小木虫论坛-学术科研互动平台 公告</strong></h2>
+            <ul class="solid">
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-11883612-1" target="_blank">
+                        【2018年度注册执考区】招聘版主/专家顾问专贴</a>
+                </li>
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-11530701-1" target="_blank">
+                        人文经济区相关版块进行重新调整公告</a>
+                </li>
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-11513921-1-pid-1#pid1" target="_blank">
+                        专业学科区紧急招聘各专业才俊担任版主~属于你的机会来了~~</a>
+                </li>
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-11264359-1" target="_blank">
+                        【人文经济区】人文经济区成立暨版主招聘简章</a>
+                </li>
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-10195222-1" target="_blank">
+                        论坛新域名muchong.com口碑评价（奖励10金币）&amp;山寨版小木虫举报指南</a>
+                </li>
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-9456136-1" target="_blank">
+                        【文献检索交流活动】你的方向你做主，检索文献快准稳</a>
+                </li>
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-6988213-1" target="_blank">
+                        【化学化工区】招聘实习版主/专家顾问（开学季，请大家踊跃申请）</a>
+                </li>
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-8698212-1" target="_blank">
+                        【有奖征集活动】文献链接检索交流——实例版</a>
+                </li>
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-5276734-1" target="_blank">
+                        【文献求助区】代理Proxy资源版招聘专家顾问</a>
+                </li>
+                <li><em>&gt;</em>
+                    <a href="http://muchong.com/t-49210-1-view-old" target="_blank">
+                        小木虫论坛基本规则(会员必读)</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="wrapper">
+
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">网络生活区</strong> (今日发帖总计: 10949，排名第 3 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-6-1" class="xmc_blue xmc_ft14" target="_blank">休闲灌水</a>
+                                <span class="xmc_fred">(今日: 7217)</span></h4>
+                            <p class="xmc_c9">主题：324224, 帖子：14786616</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233803-1" style="color:#666;" target="_blank">……</a>  10分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-133-1" class="xmc_blue xmc_ft14" target="_blank">虫友互识</a>
+                                <span class="xmc_fred">(今日: 3425)</span></h4>
+                            <p class="xmc_c9">主题：135944, 帖子：7350908</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12227248-1" style="color:#666;" target="_blank">岁月静好</a>  10分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-166-1" class="xmc_blue xmc_ft14" target="_blank">文学芳草园</a>
+                                <span class="xmc_fred">(今日: 74)</span></h4>
+                            <p class="xmc_c9">主题：29508, 帖子：661244</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233792-1" style="color:#666;" target="_blank">读书是精神的旅行，旅行是身体的阅读。</a>  15分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-359-1" class="xmc_blue xmc_ft14" target="_blank">育儿交流</a>
+                                <span class="xmc_fred">(今日: 39)</span></h4>
+                            <p class="xmc_c9">主题：12084, 帖子：836123</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11892102-1" style="color:#666;" target="_blank">祈福，散尽所有</a>  20分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-377-1" class="xmc_blue xmc_ft14" target="_blank">竞技体育</a>
+                                <span class="xmc_fred">(今日: 4)</span></h4>
+                            <p class="xmc_c9">主题：7630, 帖子：179548</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11418793-1" style="color:#666;" target="_blank">渣团夺冠 散金</a>  6小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-408-1" class="xmc_blue xmc_ft14" target="_blank">有奖起名</a>
+                                <span class="xmc_fred">(今日: 79)</span></h4>
+                            <p class="xmc_c9">主题：6965, 帖子：719321</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12232992-1" style="color:#666;" target="_blank">宝爸姓杨，宝妈姓张，给小宝找个好名字</a>  24分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-69-1" class="xmc_blue xmc_ft14" target="_blank">有奖问答</a>
+                                <span class="xmc_fred">(今日: 55)</span></h4>
+                            <p class="xmc_c9">主题：54890, 帖子：336712</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12225616-1" style="color:#666;" target="_blank">急！求大佬分享chemdraw或者chemoffice破解版安装包！ </a>  24分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-179-1" class="xmc_blue xmc_ft14" target="_blank">健康生活</a>
+                                <span class="xmc_fred">(今日: 56)</span></h4>
+                            <p class="xmc_c9">主题：19395, 帖子：494023</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233597-1" style="color:#666;" target="_blank">复试体检</a>  1小时前</p>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">科研生活区</strong> (今日发帖总计: 13448，排名第 2 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-198-1" class="xmc_blue xmc_ft14" target="_blank">硕博家园</a>
+                                <span class="xmc_fred">(今日: 1823)</span></h4>
+                            <p class="xmc_c9">主题：237879, 帖子：9333980</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233766-1" style="color:#666;" target="_blank">毕业工作以后计划</a>  10分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-199-1" class="xmc_blue xmc_ft14" target="_blank">教师之家</a>
+                                <span class="xmc_fred">(今日: 196)</span></h4>
+                            <p class="xmc_c9">主题：58606, 帖子：2553082</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12230101-1" style="color:#666;" target="_blank">西南大学纺织服装学院讲师、副教授工资待遇</a>  14分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-342-1" class="xmc_blue xmc_ft14" target="_blank">博后之家</a>
+                                <span class="xmc_fred">(今日: 382)</span></h4>
+                            <p class="xmc_c9">主题：26387, 帖子：860819</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12190382-1" style="color:#666;" target="_blank">美国纽约市--爱因斯坦医学院 (3-4人) (生物信息学, 计 </a>  16分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-328-1" class="xmc_blue xmc_ft14" target="_blank">English Cafe</a>
+                                <span class="xmc_fred">(今日: 4)</span></h4>
+                            <p class="xmc_c9">主题：13676, 帖子：324236</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11963532-1" style="color:#666;" target="_blank">2018 Do you have any expectation or wish ?</a>  2小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-405-1" class="xmc_blue xmc_ft14" target="_blank">职场人生</a>
+                                <span class="xmc_fred">(今日: 151)</span></h4>
+                            <p class="xmc_c9">主题：26524, 帖子：983250</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233667-1" style="color:#666;" target="_blank">小硕毕业三年，职场之路却已备感恐慌</a>  24分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-432-1" class="xmc_blue xmc_ft14" target="_blank">专业外语</a>
+                                <span class="xmc_fred">(今日: 25)</span></h4>
+                            <p class="xmc_c9">主题：4732, 帖子：52593</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12231394-1" style="color:#666;" target="_blank">同志们，谁有这本书的中文版啊</a>  1小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-126-1" class="xmc_blue xmc_ft14" target="_blank">外语学习</a>
+                                <span class="xmc_fred">(今日: 48)</span></h4>
+                            <p class="xmc_c9">主题：26825, 帖子：1263678</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11442098-1" style="color:#666;" target="_blank">最后一周，六级网课内容分享！</a>  3小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-430-1" class="xmc_blue xmc_ft14" target="_blank">导师招生</a>
+                                <span class="xmc_fred">(今日: 3765)</span></h4>
+                            <p class="xmc_c9">主题：50741, 帖子：2098437</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233802-1" style="color:#666;" target="_blank">紧急通知，天津理工大学陈民芳课题组接收金属材料类考 </a>  10分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-185-1" class="xmc_blue xmc_ft14" target="_blank">找工作</a>
+                                <span class="xmc_fred">(今日: 390)</span></h4>
+                            <p class="xmc_c9">主题：86885, 帖子：2680484</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12225064-1" style="color:#666;" target="_blank">西部二本高校or中部家乡国企</a>  18分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-346-1" class="xmc_blue xmc_ft14" target="_blank">招聘信息布告栏</a>
+                                <span class="xmc_fred">(今日: 972)</span></h4>
+                            <p class="xmc_c9">主题：54858, 帖子：1690539</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12232133-1" style="color:#666;" target="_blank">2018浙江(杭电)创新材料研究院 磁学与磁性材料研究中 </a>  13分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-127-1" class="xmc_blue xmc_ft14" target="_blank">考研</a>
+                                <span class="xmc_fred">(今日: 4936)</span></h4>
+                            <p class="xmc_c9">主题：268892, 帖子：4955568</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233791-1" style="color:#666;" target="_blank">福建师范大学光学工程学硕招收调剂</a>  10分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-197-1" class="xmc_blue xmc_ft14" target="_blank">考博</a>
+                                <span class="xmc_fred">(今日: 747)</span></h4>
+                            <p class="xmc_c9">主题：75578, 帖子：2720475</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12229323-1" style="color:#666;" target="_blank">南开大学2018考博</a>  17分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-280-1" class="xmc_blue xmc_ft14" target="_blank">公务员考试</a>
+                                <span class="xmc_fred">(今日: 9)</span></h4>
+                            <p class="xmc_c9">主题：9555, 帖子：422441</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11696055-1" style="color:#666;" target="_blank">公务员考试视频 某笔 免费分享给大家</a>  4小时前</p>
+                        </div>
+                    </td>
+                    <td/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">学术交流区</strong> (今日发帖总计: 14021，排名第 1 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-125-1" class="xmc_blue xmc_ft14" target="_blank">论文投稿</a>
+                                <span class="xmc_fred">(今日: 952)</span></h4>
+                            <p class="xmc_c9">主题：227092, 帖子：3492912</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233708-1" style="color:#666;" target="_blank">为什么文章没有给期和页码</a>  13分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-360-1" class="xmc_blue xmc_ft14" target="_blank">SCI期刊点评</a>
+                                <span class="xmc_fred">(今日: 11)</span></h4>
+                            <p class="xmc_c9">主题：2, 帖子：7</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-6631487-1" style="color:#666;" target="_blank">Journal of Nanomaterials 期刊约稿（SCI)收录</a>  2013-11-19 14:24</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-431-1" class="xmc_blue xmc_ft14" target="_blank">中文期刊点评</a>
+                                <span class="xmc_fred">(今日: 4)</span></h4>
+                            <p class="xmc_c9">主题：796, 帖子：5857</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12232636-1" style="color:#666;" target="_blank">期刊名称：中国新药与临床杂志</a>  6小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-307-1" class="xmc_blue xmc_ft14" target="_blank">论文道贺祈福</a>
+                                <span class="xmc_fred">(今日: 486)</span></h4>
+                            <p class="xmc_c9">主题：20214, 帖子：4239599</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233600-1" style="color:#666;" target="_blank">工作以后的第3篇SCI接收</a>  10分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-278-1" class="xmc_blue xmc_ft14" target="_blank">论文翻译</a>
+                                <span class="xmc_fred">(今日: 3)</span></h4>
+                            <p class="xmc_c9">主题：25178, 帖子：88283</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233188-1" style="color:#666;" target="_blank">求一篇关于聚4乙烯基苯基膦酸二乙酯的合成工艺研究的 </a>  3小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-234-1" class="xmc_blue xmc_ft14" target="_blank">基金申请</a>
+                                <span class="xmc_fred">(今日: 118)</span></h4>
+                            <p class="xmc_c9">主题：131689, 帖子：9130514</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11600457-1" style="color:#666;" target="_blank">面上中了，散金币5000，谢谢~~~</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-299-1" class="xmc_blue xmc_ft14" target="_blank">学术会议</a>
+                                <span class="xmc_fred">(今日: 39)</span></h4>
+                            <p class="xmc_c9">主题：24218, 帖子：257157</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233790-1" style="color:#666;" target="_blank">【2018-12-31】多学科SCI●EI（JA）期刊发表【长期征 </a>  13分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-345-1" class="xmc_blue xmc_ft14" target="_blank">会议与征稿布告栏</a>
+                                <span class="xmc_fred">(今日: 12408)</span></h4>
+                            <p class="xmc_c9">主题：10008, 帖子：1893054</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12231919-1" style="color:#666;" target="_blank">【2018-4-05】2018年材料，加工，机械工程国际会议 ( </a>  10分钟前</p>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">出国留学区</strong> (今日发帖总计: 1770，排名第 4 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-336-1" class="xmc_blue xmc_ft14" target="_blank">留学生活</a>
+                                <span class="xmc_fred">(今日: 68)</span></h4>
+                            <p class="xmc_c9">主题：12635, 帖子：347392</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12206353-1" style="color:#666;" target="_blank">有木有人在美国，可否帮我发个问卷</a>  2小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-131-1" class="xmc_blue xmc_ft14" target="_blank">公派出国</a>
+                                <span class="xmc_fred">(今日: 1294)</span></h4>
+                            <p class="xmc_c9">主题：92861, 帖子：2885449</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12221697-1" style="color:#666;" target="_blank">csc面试</a>  13分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-386-1" class="xmc_blue xmc_ft14" target="_blank">访问学者</a>
+                                <span class="xmc_fred">(今日: 154)</span></h4>
+                            <p class="xmc_c9">主题：22517, 帖子：335470</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11997501-1" style="color:#666;" target="_blank">2018曼彻斯特大学访问学者求带飞</a>  3小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-385-1" class="xmc_blue xmc_ft14" target="_blank">海外博后</a>
+                                <span class="xmc_fred">(今日: 154)</span></h4>
+                            <p class="xmc_c9">主题：19378, 帖子：485817</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12195851-1" style="color:#666;" target="_blank">香港中文大学（深圳）诚邀海内外人才申报2018年度千人 </a>  11分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-334-1" class="xmc_blue xmc_ft14" target="_blank">留学DIY</a>
+                                <span class="xmc_fred">(今日: 53)</span></h4>
+                            <p class="xmc_c9">主题：29449, 帖子：670375</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12071958-1" style="color:#666;" target="_blank">想申请美国全奖phd，求各位大佬给予指导和建议</a>  1小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-335-1" class="xmc_blue xmc_ft14" target="_blank">签证指南</a>
+                                <span class="xmc_fred">(今日: 35)</span></h4>
+                            <p class="xmc_c9">主题：19561, 帖子：360767</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12232906-1" style="color:#666;" target="_blank">我不知道自己这种情况属于哪这类签证？</a>  59分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-337-1" class="xmc_blue xmc_ft14" target="_blank">出国考试</a>
+                                <span class="xmc_fred">(今日: 3)</span></h4>
+                            <p class="xmc_c9">主题：5654, 帖子：155651</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11005379-1" style="color:#666;" target="_blank">二月考试，一起准备托福吧</a>  5小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-399-1" class="xmc_blue xmc_ft14" target="_blank">海外院所点评</a>
+                                <span class="xmc_fred">(今日: 1)</span></h4>
+                            <p class="xmc_c9">主题：2278, 帖子：32651</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12232575-1" style="color:#666;" target="_blank">求助！求帮助选校，马上要做决定了！</a>  6小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-397-1" class="xmc_blue xmc_ft14" target="_blank">海外校友录</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：11412, 帖子：3819</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-4826620-1" style="color:#666;" target="_blank">哥德堡大学</a>  5天前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-428-1" class="xmc_blue xmc_ft14" target="_blank">海归之家</a>
+                                <span class="xmc_fred">(今日: 8)</span></h4>
+                            <p class="xmc_c9">主题：1327, 帖子：44412</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12088318-1" style="color:#666;" target="_blank">读香港MBA的感想</a>  36分钟前</p>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">化学化工区</strong> (今日发帖总计: 1654，排名第 5 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-189-1" class="xmc_blue xmc_ft14" target="_blank">有机交流</a>
+                                <span class="xmc_fred">(今日: 382)</span></h4>
+                            <p class="xmc_c9">主题：208711, 帖子：1404475</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233308-1" style="color:#666;" target="_blank">氢化中加入氨水的目的</a>  10分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-325-1" class="xmc_blue xmc_ft14" target="_blank">有机资源</a>
+                                <span class="xmc_fred">(今日: 25)</span></h4>
+                            <p class="xmc_c9">主题：9050, 帖子：916197</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-4117298-1" style="color:#666;" target="_blank">关于钯碳催化剂文献若干 对于钯碳催化剂的进展论述极 </a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-236-1" class="xmc_blue xmc_ft14" target="_blank">高分子</a>
+                                <span class="xmc_fred">(今日: 159)</span></h4>
+                            <p class="xmc_c9">主题：93393, 帖子：934702</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233170-1" style="color:#666;" target="_blank">3D打印光固化树脂</a>  24分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-170-1" class="xmc_blue xmc_ft14" target="_blank">无机/物化</a>
+                                <span class="xmc_fred">(今日: 159)</span></h4>
+                            <p class="xmc_c9">主题：40670, 帖子：280006</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11922887-1" style="color:#666;" target="_blank">GO抽滤装置具体什么样？</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-238-1" class="xmc_blue xmc_ft14" target="_blank">分析</a>
+                                <span class="xmc_fred">(今日: 172)</span></h4>
+                            <p class="xmc_c9">主题：85002, 帖子：637930</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233769-1" style="color:#666;" target="_blank">玻碳电极上有气泡是怎么回事？</a>  10分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-190-1" class="xmc_blue xmc_ft14" target="_blank">催化</a>
+                                <span class="xmc_fred">(今日: 136)</span></h4>
+                            <p class="xmc_c9">主题：50192, 帖子：500911</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-8960430-1" style="color:#666;" target="_blank">催化剂制备方法</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-373-1" class="xmc_blue xmc_ft14" target="_blank">工艺技术</a>
+                                <span class="xmc_fred">(今日: 39)</span></h4>
+                            <p class="xmc_c9">主题：14205, 帖子：215964</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233788-1" style="color:#666;" target="_blank">BDP TCPP</a>  16分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-374-1" class="xmc_blue xmc_ft14" target="_blank">化工设备</a>
+                                <span class="xmc_fred">(今日: 42)</span></h4>
+                            <p class="xmc_c9">主题：11356, 帖子：145902</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12175405-1" style="color:#666;" target="_blank">目前国内做立式反应罐的搅拌器和电机有哪几家比较好</a>  17分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-212-1" class="xmc_blue xmc_ft14" target="_blank">石油化工</a>
+                                <span class="xmc_fred">(今日: 11)</span></h4>
+                            <p class="xmc_c9">主题：15111, 帖子：175712</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233754-1" style="color:#666;" target="_blank">求华东理工大学版化工设计课件</a>  29分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-227-1" class="xmc_blue xmc_ft14" target="_blank">精细化工</a>
+                                <span class="xmc_fred">(今日: 71)</span></h4>
+                            <p class="xmc_c9">主题：25421, 帖子：325780</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12231944-1" style="color:#666;" target="_blank">求教，粉体悬浮</a>  17分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-263-1" class="xmc_blue xmc_ft14" target="_blank">电化学</a>
+                                <span class="xmc_fred">(今日: 328)</span></h4>
+                            <p class="xmc_c9">主题：74141, 帖子：974468</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233618-1" style="color:#666;" target="_blank">如果测量ph为11.5的溶液，ph计的标准缓冲液应该选择多 </a>  20分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-230-1" class="xmc_blue xmc_ft14" target="_blank">环境</a>
+                                <span class="xmc_fred">(今日: 70)</span></h4>
+                            <p class="xmc_c9">主题：39316, 帖子：516155</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-448365-1" style="color:#666;" target="_blank">环境化学PPT课件_中山大学</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-343-1" class="xmc_blue xmc_ft14" target="_blank">SciFinder/Reaxys</a>
+                                <span class="xmc_fred">(今日: 60)</span></h4>
+                            <p class="xmc_c9">主题：102880, 帖子：280388</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233753-1" style="color:#666;" target="_blank">离子液体催化醇类氨化</a>  29分钟前</p>
+                        </div>
+                    </td>
+                    <td/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">材料区</strong> (今日发帖总计: 636，排名第 9 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-378-1" class="xmc_blue xmc_ft14" target="_blank">材料综合</a>
+                                <span class="xmc_fred">(今日: 145)</span></h4>
+                            <p class="xmc_c9">主题：34776, 帖子：341749</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12021271-1" style="color:#666;" target="_blank">Origin 8.5 绿色免安装</a>  15分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-379-1" class="xmc_blue xmc_ft14" target="_blank">材料工程</a>
+                                <span class="xmc_fred">(今日: 20)</span></h4>
+                            <p class="xmc_c9">主题：8745, 帖子：143215</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12228028-1" style="color:#666;" target="_blank">【2018-6-1】2018第4届材料科学与工程国际会议(ICMSE </a>  12分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-233-1" class="xmc_blue xmc_ft14" target="_blank">微米和纳米</a>
+                                <span class="xmc_fred">(今日: 98)</span></h4>
+                            <p class="xmc_c9">主题：63846, 帖子：970369</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-6015746-1" style="color:#666;" target="_blank">哪家公司的纳米压痕仪比较好？</a>  3小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-262-1" class="xmc_blue xmc_ft14" target="_blank">晶体</a>
+                                <span class="xmc_fred">(今日: 124)</span></h4>
+                            <p class="xmc_c9">主题：50444, 帖子：431949</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-2820834-1" style="color:#666;" target="_blank">【资源】XRD及结构精修和数据分析软件Origin、Jade等 </a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-301-1" class="xmc_blue xmc_ft14" target="_blank">金属</a>
+                                <span class="xmc_fred">(今日: 83)</span></h4>
+                            <p class="xmc_c9">主题：48214, 帖子：589278</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233697-1" style="color:#666;" target="_blank">纯铝在不同温度下的弹性模量</a>  13分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-213-1" class="xmc_blue xmc_ft14" target="_blank">无机非金属</a>
+                                <span class="xmc_fred">(今日: 30)</span></h4>
+                            <p class="xmc_c9">主题：28451, 帖子：295437</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12232613-1" style="color:#666;" target="_blank">陶瓷板如何测量其强度？</a>  25分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-286-1" class="xmc_blue xmc_ft14" target="_blank">生物材料</a>
+                                <span class="xmc_fred">(今日: 12)</span></h4>
+                            <p class="xmc_c9">主题：12649, 帖子：137950</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233522-1" style="color:#666;" target="_blank">在胶原肽里发现纳米载体肠道转运促进剂</a>  2小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-364-1" class="xmc_blue xmc_ft14" target="_blank">功能材料</a>
+                                <span class="xmc_fred">(今日: 49)</span></h4>
+                            <p class="xmc_c9">主题：23589, 帖子：283703</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-10282642-1" style="color:#666;" target="_blank">求自己组装静电纺丝设备</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-365-1" class="xmc_blue xmc_ft14" target="_blank">复合材料</a>
+                                <span class="xmc_fred">(今日: 75)</span></h4>
+                            <p class="xmc_c9">主题：15268, 帖子：207743</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12230757-1" style="color:#666;" target="_blank">聚丙烯腈基碳纤维原丝结晶度取向度测试</a>  24分钟前</p>
+                        </div>
+                    </td>
+                    <td/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">计算模拟区</strong> (今日发帖总计: 474，排名第 10 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-291-1" class="xmc_blue xmc_ft14" target="_blank">第一性原理</a>
+                                <span class="xmc_fred">(今日: 110)</span></h4>
+                            <p class="xmc_c9">主题：37687, 帖子：373277</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12230355-1" style="color:#666;" target="_blank">xmgrace怎么输入uVK呢 万分感谢</a>  37分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-290-1" class="xmc_blue xmc_ft14" target="_blank">量子化学</a>
+                                <span class="xmc_fred">(今日: 15)</span></h4>
+                            <p class="xmc_c9">主题：20721, 帖子：201166</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12219153-1" style="color:#666;" target="_blank">高斯计算光电材料HOMO和LOMO能级分布</a>  2小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-279-1" class="xmc_blue xmc_ft14" target="_blank">计算模拟</a>
+                                <span class="xmc_fred">(今日: 114)</span></h4>
+                            <p class="xmc_c9">主题：24354, 帖子：161618</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-10876505-1" style="color:#666;" target="_blank">关于3D-QSAR的cross-validation问题</a>  3小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-322-1" class="xmc_blue xmc_ft14" target="_blank">分子模拟</a>
+                                <span class="xmc_fred">(今日: 54)</span></h4>
+                            <p class="xmc_c9">主题：22410, 帖子：182278</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11067454-1" style="color:#666;" target="_blank">Sybyl做3D-QSAR</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-292-1" class="xmc_blue xmc_ft14" target="_blank">仿真模拟</a>
+                                <span class="xmc_fred">(今日: 166)</span></h4>
+                            <p class="xmc_c9">主题：60413, 帖子：553610</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233796-1" style="color:#666;" target="_blank">急！求帮忙！comsol仿真无限大金膜SPR</a>  13分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-312-1" class="xmc_blue xmc_ft14" target="_blank">程序语言</a>
+                                <span class="xmc_fred">(今日: 15)</span></h4>
+                            <p class="xmc_c9">主题：18753, 帖子：241381</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12225655-1" style="color:#666;" target="_blank">Java小白刚学多线程，但是写的这个运行结果跟预期不一 </a>  17分钟前</p>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">生物医药区</strong> (今日发帖总计: 739，排名第 8 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-192-1" class="xmc_blue xmc_ft14" target="_blank">新药研发</a>
+                                <span class="xmc_fred">(今日: 167)</span></h4>
+                            <p class="xmc_c9">主题：31694, 帖子：600322</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12228846-1" style="color:#666;" target="_blank">新药合成plus 之工艺总结：2018年2月FDA批准新药：ap </a>  11分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-148-1" class="xmc_blue xmc_ft14" target="_blank">药学</a>
+                                <span class="xmc_fred">(今日: 133)</span></h4>
+                            <p class="xmc_c9">主题：89044, 帖子：754656</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233784-1" style="color:#666;" target="_blank">除去是石油醚能用氮吹么？</a>  18分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-429-1" class="xmc_blue xmc_ft14" target="_blank">药品生产</a>
+                                <span class="xmc_fred">(今日: 14)</span></h4>
+                            <p class="xmc_c9">主题：4698, 帖子：65278</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12218475-1" style="color:#666;" target="_blank">C＋A级洁净区中的A跟B＋A级洁净区中的A的区别</a>  34分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-366-1" class="xmc_blue xmc_ft14" target="_blank">分子生物</a>
+                                <span class="xmc_fred">(今日: 160)</span></h4>
+                            <p class="xmc_c9">主题：67452, 帖子：591494</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12002397-1" style="color:#666;" target="_blank">请求帮忙构建细菌系统发育树</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-367-1" class="xmc_blue xmc_ft14" target="_blank">微生物</a>
+                                <span class="xmc_fred">(今日: 84)</span></h4>
+                            <p class="xmc_c9">主题：33986, 帖子：273102</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233418-1" style="color:#666;" target="_blank">求助hek-293的培养方法</a>  20分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-368-1" class="xmc_blue xmc_ft14" target="_blank">动植物</a>
+                                <span class="xmc_fred">(今日: 9)</span></h4>
+                            <p class="xmc_c9">主题：15184, 帖子：151036</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11450174-1" style="color:#666;" target="_blank">这种生物反应器(发酵罐)从哪买？</a>  7小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-144-1" class="xmc_blue xmc_ft14" target="_blank">生物科学</a>
+                                <span class="xmc_fred">(今日: 109)</span></h4>
+                            <p class="xmc_c9">主题：42604, 帖子：387576</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-7236236-1" style="color:#666;" target="_blank">Western Bio-rad湿转转膜 2张一起转时 总有一张会花掉 </a>  3小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-142-1" class="xmc_blue xmc_ft14" target="_blank">医学</a>
+                                <span class="xmc_fred">(今日: 63)</span></h4>
+                            <p class="xmc_c9">主题：17971, 帖子：254887</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12230743-1" style="color:#666;" target="_blank">视神经看片</a>  1小时前</p>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">人文经济区</strong> (今日发帖总计: 58，排名第 15 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-272-1" class="xmc_blue xmc_ft14" target="_blank">金融投资</a>
+                                <span class="xmc_fred">(今日: 7)</span></h4>
+                            <p class="xmc_c9">主题：15072, 帖子：398585</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-8826808-1" style="color:#666;" target="_blank">一些跟估值相关的课程</a>  8小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-453-1" class="xmc_blue xmc_ft14" target="_blank">人文社科</a>
+                                <span class="xmc_fred">(今日: 2)</span></h4>
+                            <p class="xmc_c9">主题：7356, 帖子：158514</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-5868572-1" style="color:#666;" target="_blank">假如真的有佛，你损失了什么？</a>  13小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-447-1" class="xmc_blue xmc_ft14" target="_blank">管理学</a>
+                                <span class="xmc_fred">(今日: 44)</span></h4>
+                            <p class="xmc_c9">主题：1011, 帖子：14380</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12228385-1" style="color:#666;" target="_blank">[2018-5-10]2018教育技术与电子商务管理国际会议(ETE </a>  36分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-446-1" class="xmc_blue xmc_ft14" target="_blank">经济学</a>
+                                <span class="xmc_fred">(今日: 5)</span></h4>
+                            <p class="xmc_c9">主题：2118, 帖子：12574</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-8844171-1" style="color:#666;" target="_blank">经济学 萨谬尔森 第十八版 中文版 pdf</a>  7小时前</p>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">专业学科区</strong> (今日发帖总计: 253，排名第 11 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-452-1" class="xmc_blue xmc_ft14" target="_blank">数理科学综合</a>
+                                <span class="xmc_fred">(今日: 1)</span></h4>
+                            <p class="xmc_c9">主题：1976, 帖子：10923</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12193669-1" style="color:#666;" target="_blank">中国民航大学理学院招聘数学教师（2018）</a>  5小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-370-1" class="xmc_blue xmc_ft14" target="_blank">机械</a>
+                                <span class="xmc_fred">(今日: 44)</span></h4>
+                            <p class="xmc_c9">主题：19469, 帖子：454357</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-7424744-1" style="color:#666;" target="_blank">DEFORM-3D入门教程</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-228-1" class="xmc_blue xmc_ft14" target="_blank">物理</a>
+                                <span class="xmc_fred">(今日: 24)</span></h4>
+                            <p class="xmc_c9">主题：20600, 帖子：278047</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12231543-1" style="color:#666;" target="_blank">电动力学磁场问题</a>  2小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-323-1" class="xmc_blue xmc_ft14" target="_blank">数学</a>
+                                <span class="xmc_fred">(今日: 26)</span></h4>
+                            <p class="xmc_c9">主题：21418, 帖子：296485</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233800-1" style="color:#666;" target="_blank">预科数学基础教程 许涓主编,2012</a>  11分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-371-1" class="xmc_blue xmc_ft14" target="_blank">农林</a>
+                                <span class="xmc_fred">(今日: 23)</span></h4>
+                            <p class="xmc_c9">主题：14411, 帖子：171398</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-7947411-1" style="color:#666;" target="_blank">今天实习中采集的标本，多为碟类。</a>  3小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-207-1" class="xmc_blue xmc_ft14" target="_blank">食品</a>
+                                <span class="xmc_fred">(今日: 30)</span></h4>
+                            <p class="xmc_c9">主题：26296, 帖子：305417</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-8639028-1" style="color:#666;" target="_blank">现代营养学（原著第九版）中文版</a>  5小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-261-1" class="xmc_blue xmc_ft14" target="_blank">地学</a>
+                                <span class="xmc_fred">(今日: 17)</span></h4>
+                            <p class="xmc_c9">主题：17741, 帖子：255118</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-3961077-1" style="color:#666;" target="_blank">非常详细的全国水系矢量图.zip</a>  5小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-372-1" class="xmc_blue xmc_ft14" target="_blank">能源</a>
+                                <span class="xmc_fred">(今日: 10)</span></h4>
+                            <p class="xmc_c9">主题：8807, 帖子：200711</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-4528955-1" style="color:#666;" target="_blank">涡旋式压缩机简介及压缩机常见故障.ppt</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-145-1" class="xmc_blue xmc_ft14" target="_blank">信息科学</a>
+                                <span class="xmc_fred">(今日: 20)</span></h4>
+                            <p class="xmc_c9">主题：17753, 帖子：242442</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12231284-1" style="color:#666;" target="_blank">【第4版】《Introduction to Random Signals and App </a>  31分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-147-1" class="xmc_blue xmc_ft14" target="_blank">土木建筑</a>
+                                <span class="xmc_fred">(今日: 46)</span></h4>
+                            <p class="xmc_c9">主题：10449, 帖子：224864</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12019308-1" style="color:#666;" target="_blank">ABAQUS中的光滑粒子流体动力学 ( SPH ) 方法</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-434-1" class="xmc_blue xmc_ft14" target="_blank">航空航天</a>
+                                <span class="xmc_fred">(今日: 6)</span></h4>
+                            <p class="xmc_c9">主题：1945, 帖子：47912</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233748-1" style="color:#666;" target="_blank">请问想研究时变系统或者参变系统有没有比较好的参考书 </a>  30分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-438-1" class="xmc_blue xmc_ft14" target="_blank">转基因</a>
+                                <span class="xmc_fred">(今日: 6)</span></h4>
+                            <p class="xmc_c9">主题：2942, 帖子：37774</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12164271-1" style="color:#666;" target="_blank">扬州大学动物科学与技术学院 李碧春教授课题组2018年 </a>  8小时前</p>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">注册执考区</strong> (今日发帖总计: 42，排名第 16 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-414-1" class="xmc_blue xmc_ft14" target="_blank">化环类执考</a>
+                                <span class="xmc_fred">(今日: 3)</span></h4>
+                            <p class="xmc_c9">主题：4147, 帖子：124816</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12104343-1" style="color:#666;" target="_blank">注册化工工程师基础考试</a>  5小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-417-1" class="xmc_blue xmc_ft14" target="_blank">医药类考试</a>
+                                <span class="xmc_fred">(今日: 20)</span></h4>
+                            <p class="xmc_c9">主题：4231, 帖子：135585</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12229294-1" style="color:#666;" target="_blank">2018年苏州市属卫生事业单位考试科目</a>  1小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-418-1" class="xmc_blue xmc_ft14" target="_blank">土建类考试</a>
+                                <span class="xmc_fred">(今日: 1)</span></h4>
+                            <p class="xmc_c9">主题：632, 帖子：22480</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12231597-1" style="color:#666;" target="_blank">2018年二建资料汇总</a>  11小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-415-1" class="xmc_blue xmc_ft14" target="_blank">经管类考试</a>
+                                <span class="xmc_fred">(今日: 9)</span></h4>
+                            <p class="xmc_c9">主题：1382, 帖子：38159</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-10976880-1" style="color:#666;" target="_blank">顺利通过PMP考试，告别小木虫APP了</a>  4小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-419-1" class="xmc_blue xmc_ft14" target="_blank">其他类执考</a>
+                                <span class="xmc_fred">(今日: 9)</span></h4>
+                            <p class="xmc_c9">主题：2392, 帖子：52014</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11836868-1" style="color:#666;" target="_blank">司法考试</a>  53分钟前</p>
+                        </div>
+                    </td>
+                    <td/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">文献求助区</strong> (今日发帖总计: 1497，排名第 6 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-158-1" class="xmc_blue xmc_ft14" target="_blank">文献求助</a>
+                                <span class="xmc_fred">(今日: 1341)</span></h4>
+                            <p class="xmc_c9">主题：20288, 帖子：53021</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233797-1" style="color:#666;" target="_blank">求助Letters in Drug Design &amp;amp; Discovery论文 </a>  12分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-219-1" class="xmc_blue xmc_ft14" target="_blank">外文书籍求助</a>
+                                <span class="xmc_fred">(今日: 92)</span></h4>
+                            <p class="xmc_c9">主题：78656, 帖子：276812</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12229602-1" style="color:#666;" target="_blank">Emerging Trends of Plant Physiology for Sustainab </a>  34分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-226-1" class="xmc_blue xmc_ft14" target="_blank">标准与专利</a>
+                                <span class="xmc_fred">(今日: 57)</span></h4>
+                            <p class="xmc_c9">主题：76626, 帖子：267096</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233399-1" style="color:#666;" target="_blank">AQ-T 4267-2015木制家具制造业建设项目职业病危害控制 </a>  1小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-130-1" class="xmc_blue xmc_ft14" target="_blank">检索知识</a>
+                                <span class="xmc_fred">(今日: 7)</span></h4>
+                            <p class="xmc_c9">主题：7842, 帖子：115311</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233575-1" style="color:#666;" target="_blank">求助！web of science账号密码，急求！！</a>  1小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-203-1" class="xmc_blue xmc_ft14" target="_blank">代理Proxy资源</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：7715, 帖子：111772</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-6665166-1" style="color:#666;" target="_blank">您最希望在代理版块看到哪些方面的内容？</a>  昨天</p>
+                        </div>
+                    </td>
+                    <td/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">资源共享区</strong> (今日发帖总计: 228，排名第 12 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-55-1" class="xmc_blue xmc_ft14" target="_blank">电脑软件</a>
+                                <span class="xmc_fred">(今日: 52)</span></h4>
+                            <p class="xmc_c9">主题：14751, 帖子：1216415</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-10964479-1" style="color:#666;" target="_blank">每个人都用得着，&lt;数学手册&gt; 1655页，很全，大 </a>  4小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-410-1" class="xmc_blue xmc_ft14" target="_blank">手机资源</a>
+                                <span class="xmc_fred">(今日: 7)</span></h4>
+                            <p class="xmc_c9">主题：3901, 帖子：83794</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11556554-1" style="color:#666;" target="_blank">围棋宝典  |安卓</a>  5小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-188-1" class="xmc_blue xmc_ft14" target="_blank">科研工具</a>
+                                <span class="xmc_fred">(今日: 49)</span></h4>
+                            <p class="xmc_c9">主题：21348, 帖子：1235755</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12152105-1" style="color:#666;" target="_blank">OriginPro 2016 SR0 b9.3.226</a>  15分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-300-1" class="xmc_blue xmc_ft14" target="_blank">科研资料</a>
+                                <span class="xmc_fred">(今日: 29)</span></h4>
+                            <p class="xmc_c9">主题：9788, 帖子：919269</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-10732665-1" style="color:#666;" target="_blank">《科学》【Science】2016年10月14日PDF全文PDF下载</a>  4小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-112-1" class="xmc_blue xmc_ft14" target="_blank">课件资源</a>
+                                <span class="xmc_fred">(今日: 39)</span></h4>
+                            <p class="xmc_c9">主题：8930, 帖子：823527</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-6041075-1" style="color:#666;" target="_blank">【课件】几何量公差课件，精密仪器必备课件，本科的时 </a>  3小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-380-1" class="xmc_blue xmc_ft14" target="_blank">试题资源</a>
+                                <span class="xmc_fred">(今日: 2)</span></h4>
+                            <p class="xmc_c9">主题：3317, 帖子：96932</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11409344-1" style="color:#666;" target="_blank">[外语考试]2017四级资料-（商志、新东方、考虫、文都 </a>  9小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-401-1" class="xmc_blue xmc_ft14" target="_blank">资源求助</a>
+                                <span class="xmc_fred">(今日: 40)</span></h4>
+                            <p class="xmc_c9">主题：36309, 帖子：120811</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12209829-1" style="color:#666;" target="_blank">求origin软件</a>  45分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-347-1" class="xmc_blue xmc_ft14" target="_blank">电脑使用</a>
+                                <span class="xmc_fred">(今日: 10)</span></h4>
+                            <p class="xmc_c9">主题：11405, 帖子：135360</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11853705-1" style="color:#666;" target="_blank">{急！急急}endnote检索本地文献始终显示no matching  </a>  6小时前</p>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">科研市场区</strong> (今日发帖总计: 953，排名第 7 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-454-1" class="xmc_blue xmc_ft14" target="_blank">课堂列表</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：69, 帖子：40686</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12159721-1" style="color:#666;" target="_blank">毕业答辩PPT代做</a>  03-15 13:09</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-284-1" class="xmc_blue xmc_ft14" target="_blank">综合广告推广</a>
+                                <span class="xmc_fred">(今日: 92)</span></h4>
+                            <p class="xmc_c9">主题：5976, 帖子：1076599</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12204721-1" style="color:#666;" target="_blank">教师备课教学不能少的扫描仪</a>  22分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-390-1" class="xmc_blue xmc_ft14" target="_blank">试剂耗材抗体推广</a>
+                                <span class="xmc_fred">(今日: 14)</span></h4>
+                            <p class="xmc_c9">主题：1216, 帖子：213247</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12228203-1" style="color:#666;" target="_blank">试剂耗材科研表征均有售，当天发货，可以记账</a>  2小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-389-1" class="xmc_blue xmc_ft14" target="_blank">仪器设备推广</a>
+                                <span class="xmc_fred">(今日: 20)</span></h4>
+                            <p class="xmc_c9">主题：861, 帖子：136898</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12232245-1" style="color:#666;" target="_blank">供KEKO锂电池电解质膜流延机 隔膜片流延机</a>  2小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-392-1" class="xmc_blue xmc_ft14" target="_blank">测试定制合成推广</a>
+                                <span class="xmc_fred">(今日: 399)</span></h4>
+                            <p class="xmc_c9">主题：4137, 帖子：693964</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12228994-1" style="color:#666;" target="_blank">开票XPS,SEM,EDS,Mapping,XRD,AFM,BET孔径分布,三维形 </a>  24分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-396-1" class="xmc_blue xmc_ft14" target="_blank">技术服务推广</a>
+                                <span class="xmc_fred">(今日: 28)</span></h4>
+                            <p class="xmc_c9">主题：1548, 帖子：290990</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12231761-1" style="color:#666;" target="_blank">提供最好、最全面的生物科学技术服务！QQ 1002761253</a>  1小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-350-1" class="xmc_blue xmc_ft14" target="_blank">留学服务推广</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：93, 帖子：9383</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12221469-1" style="color:#666;" target="_blank">大家平时有什么快递要寄到国外的吗？</a>  3天前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-394-1" class="xmc_blue xmc_ft14" target="_blank">教育培训推广</a>
+                                <span class="xmc_fred">(今日: 1)</span></h4>
+                            <p class="xmc_c9">主题：316, 帖子：24186</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12152184-1" style="color:#666;" target="_blank">优质计算机EI会议--2017届已检索，2018届如约而至</a>  3小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-316-1" class="xmc_blue xmc_ft14" target="_blank">个人求购专版</a>
+                                <span class="xmc_fred">(今日: 7)</span></h4>
+                            <p class="xmc_c9">主题：12312, 帖子：57367</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12232963-1" style="color:#666;" target="_blank">求购，请问哪个单位可以提供绣球菌菌种斜面？急！</a>  4小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-436-1" class="xmc_blue xmc_ft14" target="_blank">个人转让专版</a>
+                                <span class="xmc_fred">(今日: 61)</span></h4>
+                            <p class="xmc_c9">主题：4285, 帖子：76890</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233787-1" style="color:#666;" target="_blank">转让四川大学901和902资料，很全</a>  16分钟前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-362-1" class="xmc_blue xmc_ft14" target="_blank">QQ群/公众号专版</a>
+                                <span class="xmc_fred">(今日: 331)</span></h4>
+                            <p class="xmc_c9">主题：4810, 帖子：1028297</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233523-1" style="color:#666;" target="_blank">欢迎关注微信公众号：游老师会议咨询中心</a>  11分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-302-1" class="xmc_blue xmc_ft14" target="_blank">手机红包推广</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：80, 帖子：1715201</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12109085-1" style="color:#666;" target="_blank">【2017年上半年】优秀区长奖励领取帖</a>  2018-03-02 16:18</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-460-1" class="xmc_blue xmc_ft14" target="_blank">金币购物</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：25, 帖子：21639</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11865063-1" style="color:#666;" target="_blank">散金求祝福。</a>  4天前</p>
+                        </div>
+                    </td>
+                    <td/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">论坛事务区</strong> (今日发帖总计: 124，排名第 14 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-468-1" class="xmc_blue xmc_ft14" target="_blank">木虫讲堂</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：19, 帖子：1531</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12225751-1" style="color:#666;" target="_blank">桂林理工大学化学工程专业学位招生</a>  前天</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-437-1" class="xmc_blue xmc_ft14" target="_blank">论坛更新日志</a>
+                                <span class="xmc_fred">(今日: 1)</span></h4>
+                            <p class="xmc_c9">主题：40, 帖子：57448</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-5270539-1" style="color:#666;" target="_blank">手机用户使用“微信”来领金币、重置密码等使用帮助</a>  6小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-5-1" class="xmc_blue xmc_ft14" target="_blank">论坛公告发布</a>
+                                <span class="xmc_fred">(今日: 20)</span></h4>
+                            <p class="xmc_c9">主题：10765, 帖子：189704</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11010997-1" style="color:#666;" target="_blank">拜年啦~~2018春节快乐！18个金币红包！一起写下2018的 </a>  7小时前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-321-1" class="xmc_blue xmc_ft14" target="_blank">我来提意见</a>
+                                <span class="xmc_fred">(今日: 29)</span></h4>
+                            <p class="xmc_c9">主题：11831, 帖子：55810</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233596-1" style="color:#666;" target="_blank">专业设置有问题</a>  1小时前</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-134-1" class="xmc_blue xmc_ft14" target="_blank">版主交流</a>
+                                <span class="xmc_fred">(今日: 74)</span></h4>
+                            <p class="xmc_c9">主题：67429, 帖子：2466229</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12231633-1" style="color:#666;" target="_blank">能不能建立一个对于各个学校导师的打分或评价机制啊</a>  56分钟前</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-317-1" class="xmc_blue xmc_ft14" target="_blank">规章制度</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：35, 帖子：48</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-10369478-1" style="color:#666;" target="_blank">【版主特别规定】禁止在文献求助区以外版块求助文献的 </a>  2016-06-01 18:10</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="xmc_line_bno xmc_line_bottom">
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-215-1" class="xmc_blue xmc_ft14" target="_blank">论坛使用帮助(只读)</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：301, 帖子：32565</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-11622561-1" style="color:#666;" target="_blank">360浏览器无法登录/退出的解决办法</a>  2017-08-26 19:29</p>
+                        </div>
+                    </td>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-376-1" class="xmc_blue xmc_ft14" target="_blank">我与小木虫的故事</a>
+                                <span class="xmc_c9">(今日: 0)</span></h4>
+                            <p class="xmc_c9">主题：218, 帖子：12753</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-6872260-1" style="color:#666;" target="_blank">芬芬的木虫人生</a>  03-19 11:07</p>
+                        </div>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="forum_Box bg_global xmc_line_lr xmc_line_bno">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">版块孵化区</strong> (今日发帖总计: 158，排名第 13 位) </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td width="50%">
+                        <span class="xmc_fl forum_icon"/>
+                        <div class="xmc_fl xmc_forum_width">
+                            <h4 class="xmc_blue"><a href="http://muchong.com/f-416-1" class="xmc_blue xmc_ft14" target="_blank">版块工场</a>
+                                <span class="xmc_fred">(今日: 158)</span></h4>
+                            <p class="xmc_c9">主题：23602, 帖子：896376</p>
+                            <p style="color:#666;">最新:<a href="http://muchong.com/t-12233129-1" style="color:#666;" target="_blank">求结婚对象</a>  16分钟前</p>
+                        </div>
+                    </td>
+                    <td/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="index_rank bg_global xmc_line_lr bg_global_padding">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">24小时热门版块排行榜</strong></h2>
+            <ul class="solid">
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-6-1" target="_blank">休闲灌水</a><span class="xmc_c9"> (7217)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-127-1" target="_blank">考研</a><span class="xmc_c9"> (4936)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-430-1" target="_blank">导师招生</a><span class="xmc_c9"> (3765)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-133-1" target="_blank">虫友互识</a><span class="xmc_c9"> (3425)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-198-1" target="_blank">硕博家园</a><span class="xmc_c9"> (1823)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-158-1" target="_blank">文献求助</a><span class="xmc_c9"> (1341)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-131-1" target="_blank">公派出国</a><span class="xmc_c9"> (1294)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-346-1" target="_blank">招聘信息布告栏</a><span class="xmc_c9"> (972)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-125-1" target="_blank">论文投稿</a><span class="xmc_c9"> (952)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-197-1" target="_blank">考博</a><span class="xmc_c9"> (747)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-307-1" target="_blank">论文道贺祈福</a><span class="xmc_c9"> (486)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-185-1" target="_blank">找工作</a><span class="xmc_c9"> (390)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-189-1" target="_blank">有机交流</a><span class="xmc_c9"> (382)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-342-1" target="_blank">博后之家</a><span class="xmc_c9"> (382)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-263-1" target="_blank">电化学</a><span class="xmc_c9"> (328)</span></li>
+                <li><span class="icon_rank">&gt;</span><a class="xmc_blue" href="http://muchong.com/f-199-1" target="_blank">教师之家</a><span class="xmc_c9"> (196)</span></li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="forum_Post_index bg_global  xmc_line_lr bg_global_padding">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">热门话题贴（<a href="http://muchong.com/top-hot-1" class="xmc_ft12 xmc_blue">查看更多</a>)</strong></h2>
+            <ul class="solid">
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12233652"/>
+                    <a href="http://muchong.com/t-12233652-1" target="_blank" onclick="myread_set(12233652)">苏大考研想读能源与材料创新实验室的各位童鞋注意 ...</a>
+                    <span class="xmc_gray">5人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230981"/>
+                    <a href="http://muchong.com/t-12230981-1" target="_blank" onclick="myread_set(12230981)">楼越来越多，实验室越来越不够分的解决方案：取消 ...</a>
+                    <span class="xmc_gray">6人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12223963"/>
+                    <a href="http://muchong.com/t-12223963-1" target="_blank" onclick="myread_set(12223963)">请问有2018-2019年去哈佛大学访学的吗？...</a>
+                    <span class="xmc_gray">5人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12232952"/>
+                    <a href="http://muchong.com/t-12232952-1" target="_blank" onclick="myread_set(12232952)">四川大学...</a>
+                    <span class="xmc_gray">10人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12226370"/>
+                    <a href="http://muchong.com/t-12226370-1" target="_blank" onclick="myread_set(12226370)">工业清洗包括什么？...</a>
+                    <span class="xmc_gray">3人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231171"/>
+                    <a href="http://muchong.com/t-12231171-1" target="_blank" onclick="myread_set(12231171)">一志愿拟录取，但我一点也不开心...</a>
+                    <span class="xmc_gray">16人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230074"/>
+                    <a href="http://muchong.com/t-12230074-1" target="_blank" onclick="myread_set(12230074)">稿子被拒了，伤心...</a>
+                    <span class="xmc_gray">16人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12225537"/>
+                    <a href="http://muchong.com/t-12225537-1" target="_blank" onclick="myread_set(12225537)">生物真的有前途吗？...</a>
+                    <span class="xmc_gray">22人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230941"/>
+                    <a href="http://muchong.com/t-12230941-1" target="_blank" onclick="myread_set(12230941)">哎...</a>
+                    <span class="xmc_gray">19人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12223069"/>
+                    <a href="http://muchong.com/t-12223069-1" target="_blank" onclick="myread_set(12223069)">川大2018考博英语...</a>
+                    <span class="xmc_gray">9人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12214094"/>
+                    <a href="http://muchong.com/t-12214094-1" target="_blank" onclick="myread_set(12214094)">可以增加论文通讯作者吗？...</a>
+                    <span class="xmc_gray">8人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12219300"/>
+                    <a href="http://muchong.com/t-12219300-1" target="_blank" onclick="myread_set(12219300)">CSC结果出来了，有没有去澳洲昆士兰大学的访学的 ...</a>
+                    <span class="xmc_gray">4人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12225406"/>
+                    <a href="http://muchong.com/t-12225406-1" target="_blank" onclick="myread_set(12225406)">关于CSC博士后申请问题...</a>
+                    <span class="xmc_gray">4人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12229252"/>
+                    <a href="http://muchong.com/t-12229252-1" target="_blank" onclick="myread_set(12229252)">如何表征铁钴合金中的铁钴比例...</a>
+                    <span class="xmc_gray">3人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230946"/>
+                    <a href="http://muchong.com/t-12230946-1" target="_blank" onclick="myread_set(12230946)">准研究生的焦虑...</a>
+                    <span class="xmc_gray">8人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12210026"/>
+                    <a href="http://muchong.com/t-12210026-1" target="_blank" onclick="myread_set(12210026)">免费分享给19考研的同志们朱伟的恋练解词和词组贝 ...</a>
+                    <span class="xmc_gray">5人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231070"/>
+                    <a href="http://muchong.com/t-12231070-1" target="_blank" onclick="myread_set(12231070)">交流...</a>
+                    <span class="xmc_gray">11人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12224946"/>
+                    <a href="http://muchong.com/t-12224946-1" target="_blank" onclick="myread_set(12224946)">2018CSC 丹麦访学有没有同去的...</a>
+                    <span class="xmc_gray">3人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12227467"/>
+                    <a href="http://muchong.com/t-12227467-1" target="_blank" onclick="myread_set(12227467)">准二战记...</a>
+                    <span class="xmc_gray">29人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12225552"/>
+                    <a href="http://muchong.com/t-12225552-1" target="_blank" onclick="myread_set(12225552)">死的心都有...</a>
+                    <span class="xmc_gray">15人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12229083"/>
+                    <a href="http://muchong.com/t-12229083-1" target="_blank" onclick="myread_set(12229083)">班主任招收一名调剂生...</a>
+                    <span class="xmc_gray">11人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12218167"/>
+                    <a href="http://muchong.com/t-12218167-1" target="_blank" onclick="myread_set(12218167)">读博还是工作？...</a>
+                    <span class="xmc_gray">13人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12226935"/>
+                    <a href="http://muchong.com/t-12226935-1" target="_blank" onclick="myread_set(12226935)">调剂录取却开心...</a>
+                    <span class="xmc_gray">6人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12225022"/>
+                    <a href="http://muchong.com/t-12225022-1" target="_blank" onclick="myread_set(12225022)">审稿状态变了...</a>
+                    <span class="xmc_gray">7人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12225140"/>
+                    <a href="http://muchong.com/t-12225140-1" target="_blank" onclick="myread_set(12225140)">等待无疑是很漫长...</a>
+                    <span class="xmc_gray">8人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12226403"/>
+                    <a href="http://muchong.com/t-12226403-1" target="_blank" onclick="myread_set(12226403)">分享2017年申请CSC联培博士和办理英国T5签证相关 ...</a>
+                    <span class="xmc_gray">3人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12216321"/>
+                    <a href="http://muchong.com/t-12216321-1" target="_blank" onclick="myread_set(12216321)">春日手谈...</a>
+                    <span class="xmc_gray">5人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12213610"/>
+                    <a href="http://muchong.com/t-12213610-1" target="_blank" onclick="myread_set(12213610)">280求调剂...</a>
+                    <span class="xmc_gray">4人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12226429"/>
+                    <a href="http://muchong.com/t-12226429-1" target="_blank" onclick="myread_set(12226429)">考研调剂...</a>
+                    <span class="xmc_gray">8人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12211174"/>
+                    <a href="http://muchong.com/t-12211174-1" target="_blank" onclick="myread_set(12211174)">九江学院 药学与生命科学学院 诚聘海内外优秀博士 ...</a>
+                    <span class="xmc_gray">3人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12221951"/>
+                    <a href="http://muchong.com/t-12221951-1" target="_blank" onclick="myread_set(12221951)">2018年3月份短线荐股月度评比...</a>
+                    <span class="xmc_gray">6人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12225489"/>
+                    <a href="http://muchong.com/t-12225489-1" target="_blank" onclick="myread_set(12225489)">有没有学材料 还没有调剂的。...</a>
+                    <span class="xmc_gray">3人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12212333"/>
+                    <a href="http://muchong.com/t-12212333-1" target="_blank" onclick="myread_set(12212333)">江汉大学环境与健康研究院接收生物化学环境方向调 ...</a>
+                    <span class="xmc_gray">4人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12218201"/>
+                    <a href="http://muchong.com/t-12218201-1" target="_blank" onclick="myread_set(12218201)">我这情况是不是考上了？...</a>
+                    <span class="xmc_gray">14人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12223971"/>
+                    <a href="http://muchong.com/t-12223971-1" target="_blank" onclick="myread_set(12223971)">水工结构读博...</a>
+                    <span class="xmc_gray">4人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12223064"/>
+                    <a href="http://muchong.com/t-12223064-1" target="_blank" onclick="myread_set(12223064)">调剂到最后在太原理工，陕西师范和河北工业中选择 ...</a>
+                    <span class="xmc_gray">5人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12222129"/>
+                    <a href="http://muchong.com/t-12222129-1" target="_blank" onclick="myread_set(12222129)">双非终于调剂成功普通211...</a>
+                    <span class="xmc_gray">14人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12212039"/>
+                    <a href="http://muchong.com/t-12212039-1" target="_blank" onclick="myread_set(12212039)">6501、氧化胺、甜菜碱、APG在洗洁精中除油效果哪 ...</a>
+                    <span class="xmc_gray">4人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12222135"/>
+                    <a href="http://muchong.com/t-12222135-1" target="_blank" onclick="myread_set(12222135)">一志愿被刷，在找调剂...</a>
+                    <span class="xmc_gray">10人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12221563"/>
+                    <a href="http://muchong.com/t-12221563-1" target="_blank" onclick="myread_set(12221563)">投稿就能中的期刊有吗？...</a>
+                    <span class="xmc_gray">9人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12220640"/>
+                    <a href="http://muchong.com/t-12220640-1" target="_blank" onclick="myread_set(12220640)">scientific reports最近是不是特别慢啊？还是本人 ...</a>
+                    <span class="xmc_gray">8人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12219967"/>
+                    <a href="http://muchong.com/t-12219967-1" target="_blank" onclick="myread_set(12219967)">山东大学考博求助...</a>
+                    <span class="xmc_gray">6人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12221772"/>
+                    <a href="http://muchong.com/t-12221772-1" target="_blank" onclick="myread_set(12221772)">河北大学和武汉科技大学那个学校化学类专业好一点...</a>
+                    <span class="xmc_gray">5人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12221099"/>
+                    <a href="http://muchong.com/t-12221099-1" target="_blank" onclick="myread_set(12221099)">玻璃心...</a>
+                    <span class="xmc_gray">3人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12218529"/>
+                    <a href="http://muchong.com/t-12218529-1" target="_blank" onclick="myread_set(12218529)">谁能教我写文献综述？？？...</a>
+                    <span class="xmc_gray">3人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12216013"/>
+                    <a href="http://muchong.com/t-12216013-1" target="_blank" onclick="myread_set(12216013)">考博...</a>
+                    <span class="xmc_gray">3人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12211224"/>
+                    <a href="http://muchong.com/t-12211224-1" target="_blank" onclick="myread_set(12211224)">婚姻真的要门当户对吗...</a>
+                    <span class="xmc_gray">23人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12217405"/>
+                    <a href="http://muchong.com/t-12217405-1" target="_blank" onclick="myread_set(12217405)">二战...</a>
+                    <span class="xmc_gray">12人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12216854"/>
+                    <a href="http://muchong.com/t-12216854-1" target="_blank" onclick="myread_set(12216854)">部分可查...</a>
+                    <span class="xmc_gray">30人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12216705"/>
+                    <a href="http://muchong.com/t-12216705-1" target="_blank" onclick="myread_set(12216705)">山大青岛校区专硕和山大威海校区学硕怎么选？...</a>
+                    <span class="xmc_gray">8人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12211633"/>
+                    <a href="http://muchong.com/t-12211633-1" target="_blank" onclick="myread_set(12211633)">请问基金本子一般什么时候送审呢...</a>
+                    <span class="xmc_gray">7人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12214460"/>
+                    <a href="http://muchong.com/t-12214460-1" target="_blank" onclick="myread_set(12214460)">求教大学老师怎么发论文...</a>
+                    <span class="xmc_gray">7人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12212114"/>
+                    <a href="http://muchong.com/t-12212114-1" target="_blank" onclick="myread_set(12212114)">344求调剂...</a>
+                    <span class="xmc_gray">8人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12214061"/>
+                    <a href="http://muchong.com/t-12214061-1" target="_blank" onclick="myread_set(12214061)">一...</a>
+                    <span class="xmc_gray">17人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12211408"/>
+                    <a href="http://muchong.com/t-12211408-1" target="_blank" onclick="myread_set(12211408)">环境工程调剂...</a>
+                    <span class="xmc_gray">6人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12212811"/>
+                    <a href="http://muchong.com/t-12212811-1" target="_blank" onclick="myread_set(12212811)">想放弃...</a>
+                    <span class="xmc_gray">15人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12212235"/>
+                    <a href="http://muchong.com/t-12212235-1" target="_blank" onclick="myread_set(12212235)">哎，调剂无望了...</a>
+                    <span class="xmc_gray">19人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12210155"/>
+                    <a href="http://muchong.com/t-12210155-1" target="_blank" onclick="myread_set(12210155)">印染废水...</a>
+                    <span class="xmc_gray">5人参与</span>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12211484"/>
+                    <a href="http://muchong.com/t-12211484-1" target="_blank" onclick="myread_set(12211484)">求助，会不会收到两个待录取通知呢...</a>
+                    <span class="xmc_gray">4人参与</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="forum_Post_index bg_global  xmc_line_lr bg_global_padding">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">热门资源贴（<a href="http://muchong.com/top-credit-1" class="xmc_ft12 xmc_blue">查看更多</a>)</strong></h2>
+            <ul class="solid">
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228486"/>
+                    <a href="http://muchong.com/t-12228486-1" target="_blank" onclick="myread_set(12228486)">制药项目管理：原料药工艺流程控制—金晶2018.2.28...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12214128"/>
+                    <a href="http://muchong.com/t-12214128-1" target="_blank" onclick="myread_set(12214128)">英语润色软件whitesmoker...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12212415"/>
+                    <a href="http://muchong.com/t-12212415-1" target="_blank" onclick="myread_set(12212415)">美版新概念英语听力（四册）...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12222833"/>
+                    <a href="http://muchong.com/t-12222833-1" target="_blank" onclick="myread_set(12222833)">化学仿制原料药DMF编写及实例分析—姜桥2018.3.28...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12225947"/>
+                    <a href="http://muchong.com/t-12225947-1" target="_blank" onclick="myread_set(12225947)">中科院化学学报 201803...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12221494"/>
+                    <a href="http://muchong.com/t-12221494-1" target="_blank" onclick="myread_set(12221494)">冰点文库下载器 v3.2.2 (0330) 去广告绿色版...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12222878"/>
+                    <a href="http://muchong.com/t-12222878-1" target="_blank" onclick="myread_set(12222878)">林少宫 微观计量经济学要义：问题与方法 2003...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12209458"/>
+                    <a href="http://muchong.com/t-12209458-1" target="_blank" onclick="myread_set(12209458)">【科技文章写作】《Scientific Papers and Presentations (3rd Editio ...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12214113"/>
+                    <a href="http://muchong.com/t-12214113-1" target="_blank" onclick="myread_set(12214113)">英语润色易改checker...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12222468"/>
+                    <a href="http://muchong.com/t-12222468-1" target="_blank" onclick="myread_set(12222468)">【英美经典书籍】《Python Programming for Biology》【已搜索，无重复 ...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12210232"/>
+                    <a href="http://muchong.com/t-12210232-1" target="_blank" onclick="myread_set(12210232)">【英美经典书籍】《An Introduction to Mechanical Engineering》(第3 ...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12210186"/>
+                    <a href="http://muchong.com/t-12210186-1" target="_blank" onclick="myread_set(12210186)">origin2018 SR1 ，已验证，无大C。极其稳定。...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12220502"/>
+                    <a href="http://muchong.com/t-12220502-1" target="_blank" onclick="myread_set(12220502)">Synfact 2018-4...</a>
+                </li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12220496"/>
+                    <a href="http://muchong.com/t-12220496-1" target="_blank" onclick="myread_set(12220496)">Synfact 2018-3...</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="forum_Post_index bg_global  xmc_line_lr bg_global_padding">
+            <h2 class="xmc_title xmc_blue"><strong class="xmc_ft14">热门悬赏贴（<a href="http://muchong.com/top-helpcredit-1" class="xmc_ft12 xmc_blue">查看更多</a>)</strong></h2>
+            <ul class="solid">
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12233791"/>
+                    <a href="http://muchong.com/t-12233791-1" target="_blank" onclick="myread_set(12233791)">福建师范大学光学工程学硕招收调剂...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">33</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12232989"/>
+                    <a href="http://muchong.com/t-12232989-1" target="_blank" onclick="myread_set(12232989)">恭喜师弟SCI接收...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">531</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230757"/>
+                    <a href="http://muchong.com/t-12230757-1" target="_blank" onclick="myread_set(12230757)">聚丙烯腈基碳纤维原丝结晶度取向度测试...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12232546"/>
+                    <a href="http://muchong.com/t-12232546-1" target="_blank" onclick="myread_set(12232546)">TPR，TPD，各种气氛的化学活性位测试，上海地区上 ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">126</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12233735"/>
+                    <a href="http://muchong.com/t-12233735-1" target="_blank" onclick="myread_set(12233735)">CV测试图像问题...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">15</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12233536"/>
+                    <a href="http://muchong.com/t-12233536-1" target="_blank" onclick="myread_set(12233536)">德文文献翻译成中文...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">50</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12232245"/>
+                    <a href="http://muchong.com/t-12232245-1" target="_blank" onclick="myread_set(12232245)">供KEKO锂电池电解质膜流延机 隔膜片流延机...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">83</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12233454"/>
+                    <a href="http://muchong.com/t-12233454-1" target="_blank" onclick="myread_set(12233454)">稀土附近有很多定不下来的Q峰，Q峰都是7左右？...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">20</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12232212"/>
+                    <a href="http://muchong.com/t-12232212-1" target="_blank" onclick="myread_set(12232212)">考博复试散金，求通过...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">50</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12233230"/>
+                    <a href="http://muchong.com/t-12233230-1" target="_blank" onclick="myread_set(12233230)">肟化反应 溶剂选择...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">18</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12233176"/>
+                    <a href="http://muchong.com/t-12233176-1" target="_blank" onclick="myread_set(12233176)">中南大学制备非晶粉末的课题组或者负责的有认识的 ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231504"/>
+                    <a href="http://muchong.com/t-12231504-1" target="_blank" onclick="myread_set(12231504)">光电流和荧光结果解释...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">100</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12233012"/>
+                    <a href="http://muchong.com/t-12233012-1" target="_blank" onclick="myread_set(12233012)">matlab仿真机器人...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">25</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12232916"/>
+                    <a href="http://muchong.com/t-12232916-1" target="_blank" onclick="myread_set(12232916)">chemoffice破解版...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">50</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12232917"/>
+                    <a href="http://muchong.com/t-12232917-1" target="_blank" onclick="myread_set(12232917)">ADAMS2005程序安装包...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230942"/>
+                    <a href="http://muchong.com/t-12230942-1" target="_blank" onclick="myread_set(12230942)">求各位师兄师姐前辈老师解惑...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12232823"/>
+                    <a href="http://muchong.com/t-12232823-1" target="_blank" onclick="myread_set(12232823)">副教授+20w+120平+配偶工作    招聘生物医用材料 ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231810"/>
+                    <a href="http://muchong.com/t-12231810-1" target="_blank" onclick="myread_set(12231810)">请问计算吸附能时是用几何优化后castep文件中的能 ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">15</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231895"/>
+                    <a href="http://muchong.com/t-12231895-1" target="_blank" onclick="myread_set(12231895)">厌氧细菌摇瓶培养及5L小罐培养都出现贴壁现象，大 ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">28</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231852"/>
+                    <a href="http://muchong.com/t-12231852-1" target="_blank" onclick="myread_set(12231852)">刚果红筛选没有水解圈；木质素降解菌筛选，苯胺蓝 ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">170</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231927"/>
+                    <a href="http://muchong.com/t-12231927-1" target="_blank" onclick="myread_set(12231927)">大孔孔径分布测试...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">30</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12232474"/>
+                    <a href="http://muchong.com/t-12232474-1" target="_blank" onclick="myread_set(12232474)">求教...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12210058"/>
+                    <a href="http://muchong.com/t-12210058-1" target="_blank" onclick="myread_set(12210058)">atk怎样把它们之间的键调出来...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231620"/>
+                    <a href="http://muchong.com/t-12231620-1" target="_blank" onclick="myread_set(12231620)">求助《中国环境统计年报》...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">188</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231005"/>
+                    <a href="http://muchong.com/t-12231005-1" target="_blank" onclick="myread_set(12231005)">西湖大学招生...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12213585"/>
+                    <a href="http://muchong.com/t-12213585-1" target="_blank" onclick="myread_set(12213585)">请问各位大神，有没有可以预测基因是否有前肽的网 ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231217"/>
+                    <a href="http://muchong.com/t-12231217-1" target="_blank" onclick="myread_set(12231217)">Algebraic Number Theory (Cambridge Studies in ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">300</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12214912"/>
+                    <a href="http://muchong.com/t-12214912-1" target="_blank" onclick="myread_set(12214912)">求助Prism教程，或者书籍学习一下...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">100</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12231046"/>
+                    <a href="http://muchong.com/t-12231046-1" target="_blank" onclick="myread_set(12231046)">材料...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228273"/>
+                    <a href="http://muchong.com/t-12228273-1" target="_blank" onclick="myread_set(12228273)">NBS溴代反应...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12220975"/>
+                    <a href="http://muchong.com/t-12220975-1" target="_blank" onclick="myread_set(12220975)">这个修回日期怎么看...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">200</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230701"/>
+                    <a href="http://muchong.com/t-12230701-1" target="_blank" onclick="myread_set(12230701)">求助Bixalomer的汤森路透的报告及年销售额...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">50</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230045"/>
+                    <a href="http://muchong.com/t-12230045-1" target="_blank" onclick="myread_set(12230045)">哪位高手指教一下，晶体画图，谢谢！...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">30</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230532"/>
+                    <a href="http://muchong.com/t-12230532-1" target="_blank" onclick="myread_set(12230532)">CMSG的UMAT有限元实现...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">50</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228265"/>
+                    <a href="http://muchong.com/t-12228265-1" target="_blank" onclick="myread_set(12228265)">Ni柱纯化...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230453"/>
+                    <a href="http://muchong.com/t-12230453-1" target="_blank" onclick="myread_set(12230453)">求高手指点...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">100</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12230349"/>
+                    <a href="http://muchong.com/t-12230349-1" target="_blank" onclick="myread_set(12230349)">关于测定五氯酚的问题...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12224138"/>
+                    <a href="http://muchong.com/t-12224138-1" target="_blank" onclick="myread_set(12224138)">我这样做合适么？...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">20</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228765"/>
+                    <a href="http://muchong.com/t-12228765-1" target="_blank" onclick="myread_set(12228765)">怎么画原理图？...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">20</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12229494"/>
+                    <a href="http://muchong.com/t-12229494-1" target="_blank" onclick="myread_set(12229494)">生产上关于无水硫酸镁干燥的疑惑求解...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">10</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228058"/>
+                    <a href="http://muchong.com/t-12228058-1" target="_blank" onclick="myread_set(12228058)">人造石墨与钛酸锂做全电池...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">20</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12222904"/>
+                    <a href="http://muchong.com/t-12222904-1" target="_blank" onclick="myread_set(12222904)">求2015版中国药典通则,多谢!...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">20</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228320"/>
+                    <a href="http://muchong.com/t-12228320-1" target="_blank" onclick="myread_set(12228320)">【2018-4-05】2018年第二届材料科学、能源技术、 ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">967</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12227991"/>
+                    <a href="http://muchong.com/t-12227991-1" target="_blank" onclick="myread_set(12227991)">全英文名普刊征稿...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">991</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228936"/>
+                    <a href="http://muchong.com/t-12228936-1" target="_blank" onclick="myread_set(12228936)">organic photovoltaics和organic solar cells的区 ...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">25</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228797"/>
+                    <a href="http://muchong.com/t-12228797-1" target="_blank" onclick="myread_set(12228797)">谁有晶体衍射模拟软件，要能用 。谢谢...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">166</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228386"/>
+                    <a href="http://muchong.com/t-12228386-1" target="_blank" onclick="myread_set(12228386)">晶体...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">20</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228445"/>
+                    <a href="http://muchong.com/t-12228445-1" target="_blank" onclick="myread_set(12228445)">雅思听力红宝书全名叫啥？...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">15</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228366"/>
+                    <a href="http://muchong.com/t-12228366-1" target="_blank" onclick="myread_set(12228366)">求助标准...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">30</span></li>
+                <li><em>&gt;</em>
+                    <span class="xmc_gray" id="list_myread_12228363"/>
+                    <a href="http://muchong.com/t-12228363-1" target="_blank" onclick="myread_set(12228363)">求助标准...</a>
+                    <img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/credit.gif" align="absmiddle"/><span class="xmc_fred">30</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class=" xmc_plr xmc_tp10 xmc_bp10">
+            <strong class="xmc_blue">在线用户：</strong> 当前论坛总共 19433 人在线，其中注册用户 16194 人，游客 3239 人。 最高纪录是 76083 人， 于 2016-07-23 11:06:21    </div>
+    </div>
+    <div class="hr_10"/>&#13;
+    <footer style="background: #fff;">&#13;
+        <div class="footer_icp"/>&#13;
+        <iframe id="ajaxframe" name="ajaxframe" frameborder="0" scrolling="no" src="about:blank;" width="0" height="0" charset="gbk" style="height: 0px; line-height: 1px;"/>&#13;
+        <div class="wrapper">&#13;
+            <div class="padding:20px;">&#13;
+                <table cellspacing="5" cellpadding="5" align="center">&#13;
+                    <tr><td align="center"><a href="http://muchong.com/bbs/a234.html" class="" target="_blank" style="display: inherit!important;"><img src="http://muchongimg.xmcimg.com/data/bcs/2016/0911/1_1473588961_512.gif" align="absmiddle" width="760" height="90"/></a></td></tr>&#13;
+                    <tr><td align="center"/></tr>&#13;
+                    <tr><td align="center"/></tr>&#13;
+                    <tr><td align="center" height="60">&#13;
+                        <p onclick="view_ok();">&#13;
+                            <font color="red">查看得金币!</font>&#13;
+                            <strong style="font-size:24px;"><u><a href="http://muchong.com/bbs/a1462.html" class="" target="_blank" style="display: inherit!important;">金唯智测序、合成引物、基因合成、新客立享优惠！</a></u></strong>&#13;
+                        </p>&#13;
+                    </td></tr>&#13;
+                </table>&#13;
+            </div>&#13;
+        </div>&#13;
+        <div class="hr_20"/>&#13;
+        &#13;
+        &#13;
+        &#13;
+        <div style="text-align:center;margin:0 auto;margin:0 auto;">&#13;
+            <a name="#bottom"/>&#13;
+            <table align="center">&#13;
+                <tr>&#13;
+                    <td align="center" style="padding-left:20px;">&#13;
+                        &#13;
+                        <div style="line-height:1.5;">&#13;
+                            <a href="http://mob.muchong.com/bbs/index.php?pc=no" class="mediumtxt" rel="nofollow"><u>切换到手机版</u></a> -&#13;
+                            <a href="http://muchong.com/t-11622561-1" class="mediumtxt" rel="nofollow" target="_blank"><u>清除COOKIES</u></a> -&#13;
+                            <a href="http://muchong.com/bbs/supporter.php?view=ad" class="mediumtxt" rel="nofollow"><u>广告投放说明</u></a> -&#13;
+                            <a href="http://muchong.com/bbs/post.php?action=newthread&amp;fid=321" class="mediumtxt" rel="nofollow"><u>给我们提意见</u></a> -&#13;
+                            <a href="http://m.muchong.com/?f=bbs&amp;w=footer_text" target="_blank"><u>手机客户端</u></a> -&#13;
+                            <a href="http://muchong.com/bbs/supporter.php" target="_blank"><u>捐助小木虫</u></a> -&#13;
+                            <a href="http://src.100tal.com/?_f=muchong" target="_blank" rel="nofollow"><u>漏洞提交</u></a>&#13;
+                            - <a href="http://muchong.com/bbs/rss.php?fid=" title="RSS订阅" rel="nofollow"><img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/rss.gif" align="absmiddle" border="0"/> RSS订阅</a><br/>&#13;
+                            小木虫,学术科研互动社区,为中国学术科研免费提供动力<br/>&#13;
+                            违规贴举报删除请发送邮件至：emuch2018@163.com<br/>&#13;
+                            广告投放与宣传请联系 <u>李想</u> QQ：<a href="http://wpa.qq.com/msgrd?v=3&amp;uin=64901448&amp;site=qq&amp;menu=yes"><u>64901448</u></a>&#13;
+                            QQ：<a href="http://wpa.qq.com/msgrd?v=3&amp;uin=2829862428&amp;site=qq&amp;menu=yes"><u>2829862428</u></a>  邮箱：<u>64901448@qq.com</u><br/>&#13;
+                            &#13;
+                            <div style="color:gray;">Copyright © 2001-2018 MuChong.com, All Rights Reserved. 小木虫 版权所有&#13;
+                            </div>&#13;
+                            <div>&#13;
+                                <a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">京ICP备09032638号-13</a>&#13;
+                                <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802022153" rel="nofollow"><img src="http://muchongimg.xmcimg.com/data/emuch_bbs_images/logo/jgwab.jpg" align="absmiddle"/>京公网安备 11010802022153号</a>&#13;
+                                &#13;
+                            </div>&#13;
+                            <br/>&#13;
+                            <table>&#13;
+                                <tr>&#13;
+                                    <td style="padding-right: 15px; border-right: 1px solid #cccccc"><a target="_blank" href="http://m.muchong.com/?f=bbs&amp;w=footer_v" rel="nofollow"><img height="100" src="http://muchongimg.xmcimg.com/data/bcs/2017/0226/1_1488123568_827.png"/></a>&#13;
+                                    </td>&#13;
+                                    <td style="padding-left: 15px;">&#13;
+                                        <a key="5704b2daefbfb0745c47297e" logo_size="124x47" logo_type="business" href="http://www.anquan.org">&#13;
+                                            <script src="http://static.anquan.org/static/outer/js/aq_auth.js"/>&#13;
+                                        </a>&#13;
+                                    </td>&#13;
+                                </tr>&#13;
+                            </table>&#13;
+                        </div>&#13;
+                    </td>&#13;
+                </tr>&#13;
+            </table>&#13;
+            <br/></div>&#13;
+        <div id="goTopBtn" style="display:none;"/>&#13;
+        <script type="text/javascript">goTopEx();</script>&#13;
+    </footer>&#13;
+    <script>&#13;
+        &#13;
+        ;(function(){&#13;
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){&#13;
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),&#13;
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)&#13;
+            })(window,document,'script','http://muchongimg.xmcimg.com/data/emuch_bbs_images/js/qing/js/analytics.js?15373250','ga');&#13;
+            var f = emuch.getQueryString('f');&#13;
+            if(f !== null ) {&#13;
+                var w = emuch.getQueryString('w');&#13;
+                ga('outside', 'event', 'web', f,w);&#13;
+            }&#13;
+            ga('create', 'UA-1947017-8', 'auto');&#13;
+            ga('set', 'userId', 3302227);&#13;
+            ga('create', 'UA-XXXX-Y', {'userId': '3302227'});&#13;
+            if(typeof XMC_GKEY != "undefined" &amp;&amp; XMC_GKEY){&#13;
+                ga('set', 'title', XMC_GKEY);&#13;
+            }&#13;
+            ga('send', 'pageview');&#13;
+            if(typeof GA_TYPE != "undefined" &amp;&amp; typeof GA_TYPE_NAME  != "undefined" ) {&#13;
+                ga('send', 'event', GA_TYPE_NAME, GA_TYPE, "0");&#13;
+            }&#13;
+            var _hmt = _hmt || [];&#13;
+            (function() {&#13;
+                var hm = document.createElement("script");&#13;
+                hm.src = "https://hm.baidu.com/hm.js?2207ecfb7b2633a3bc5c4968feb58569";&#13;
+                var s = document.getElementsByTagName("script")[0];&#13;
+                s.parentNode.insertBefore(hm, s);&#13;
+            })();&#13;
+        })();&#13;
+    </script>&#13;
+    &#13;
+    &#13;
+    &#13;
+    &#13;
+</div></body>&#13;
+</html>
