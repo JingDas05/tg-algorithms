@@ -12,7 +12,7 @@ public class SynchronizedTest {
 //        FileOutputStream fileOutputStream;
 //        BufferedOutputStream bufferedOutputStream;
 //        try {
-//            fileOutputStream = new FileOutputStream(new File("F:\\code\\tg-algorithms\\src\\main\\java\\top\\treegrowth\\parallelism\\test.txt"));
+//            fileOutputStream = new FileOutputStream(new File("F:\\code\\tg-algorithms\\src\\Data\\java\\top\\treegrowth\\parallelism\\test.txt"));
 //            bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
 //            for (int i = 1; i < 100000; i++) {
 //                System.out.println("method11111");

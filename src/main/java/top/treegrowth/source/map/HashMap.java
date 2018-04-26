@@ -423,7 +423,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
      *
      * @serial
      */
-    // (The javadoc description is true upon serialization.
+    // (The javadoc Description is true upon serialization.
     // Additionally, if the table array has not been allocated, this
     // field holds the initial array capacity, or zero signifying
     // DEFAULT_INITIAL_CAPACITY.)
@@ -573,12 +573,15 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         K k;
         if ((tab = table) != null && (n = tab.length) > 0 &&
                 (first = tab[(n - 1) & hash]) != null) {
+            // 总是检查首节点
             if (first.hash == hash && // always check first node
                     ((k = first.key) == key || (key != null && key.equals(k))))
                 return first;
             if ((e = first.next) != null) {
+                // 处理树状结构
                 if (first instanceof HashMap.TreeNode)
                     return ((HashMap.TreeNode<K, V>) first).getTreeNode(hash, key);
+                // 处理链表结构
                 do {
                     if (e.hash == hash &&
                             ((k = e.key) == key || (key != null && key.equals(k))))
@@ -712,6 +715,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         int oldThr = threshold;
         // 初始化新的table 的 容量 和 阈值
         int newCap, newThr = 0;
+        // 首先确定容量和阈值
         // 处理oldTable有值的情况
         if (oldCap > 0) {
             // 如果已经超过最大容量了，直接返回旧table,无法扩容
@@ -745,7 +749,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         // 创建新table,长度为新容量
         @SuppressWarnings({"rawtypes", "unchecked"})
         HashMap.Node<K, V>[] newTab = (HashMap.Node<K, V>[]) new HashMap.Node[newCap];
-        // 赋值当前table
+        // table指向扩容后的数组
         table = newTab;
         // 复制扩容
         if (oldTab != null) {
@@ -776,7 +780,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                         do {
                             // 暂存e的子节点
                             next = e.next;
-                            // 对
+                            // 处理e节点
                             if ((e.hash & oldCap) == 0) {
                                 if (loTail == null)
                                     loHead = e;
@@ -791,12 +795,15 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                                 hiTail = e;
                             }
                         } while ((e = next) != null);
+                        // 如果不为空，进行赋值
                         if (loTail != null) {
                             loTail.next = null;
+                            // 赋值头部
                             newTab[j] = loHead;
                         }
                         if (hiTail != null) {
                             hiTail.next = null;
+                            // 赋值头部
                             newTab[j + oldCap] = hiHead;
                         }
                     }
@@ -871,11 +878,14 @@ public class HashMap<K, V> extends AbstractMap<K, V>
      */
     final HashMap.Node<K, V> removeNode(int hash, Object key, Object value,
                                         boolean matchValue, boolean movable) {
+        // 指向数组
         HashMap.Node<K, V>[] tab;
+        // 暂存要移除的节点
         HashMap.Node<K, V> p;
         int n, index;
         if ((tab = table) != null && (n = tab.length) > 0 &&
                 (p = tab[index = (n - 1) & hash]) != null) {
+            // 实际要移除的节点
             HashMap.Node<K, V> node = null, e;
             K k;
             V v;
@@ -883,9 +893,11 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                     ((k = p.key) == key || (key != null && key.equals(k))))
                 node = p;
             else if ((e = p.next) != null) {
+                // 处理链表结构
                 if (p instanceof HashMap.TreeNode)
                     node = ((HashMap.TreeNode<K, V>) p).getTreeNode(hash, key);
                 else {
+                    // 处理树结构
                     do {
                         if (e.hash == hash &&
                                 ((k = e.key) == key ||
@@ -897,13 +909,17 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                     } while ((e = e.next) != null);
                 }
             }
+            // 判断是否满足删除条件
             if (node != null && (!matchValue || (v = node.value) == value ||
                     (value != null && value.equals(v)))) {
+                // 处理树结构
                 if (node instanceof HashMap.TreeNode)
                     ((HashMap.TreeNode<K, V>) node).removeTreeNode(this, tab, movable);
                 else if (node == p)
+                    // 处理普通节点
                     tab[index] = node.next;
                 else
+                    // 处理链表结构
                     p.next = node.next;
                 ++modCount;
                 --size;
