@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 /**
  * @author Administrator
  */
-public class Client {
+public class ThreadLocalBestUser {
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newFixedThreadPool(100);
