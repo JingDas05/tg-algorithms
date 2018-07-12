@@ -1,11 +1,15 @@
 package top.treegrowth;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
+import top.treegrowth.mybatis.Client;
+
+import javax.annotation.Resource;
 
 /**
  * @author wusi
@@ -14,7 +18,11 @@ import org.springframework.context.annotation.Configuration;
 @SpringBootApplication
 //如果是双数据源，需要用下面的启动类
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@MapperScan("top.treegrowth.mybatis.mapper")
 public class BootStrapApp {
+
+    @Resource
+    private Client client;
 
     public static void main(String[] args) {
         SpringApplication.run(BootStrapApp.class, args);
@@ -24,6 +32,7 @@ public class BootStrapApp {
         @Override
         public void run(String... strings) throws Exception {
             System.out.println("项目启动时，本方法会执行");
+            client.test();
         }
     }
 }
