@@ -18,7 +18,6 @@ import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,7 +31,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  *
  * @author wusi
  */
-@Service
+//@Service
 public class EsOperationManager {
 
     @Resource

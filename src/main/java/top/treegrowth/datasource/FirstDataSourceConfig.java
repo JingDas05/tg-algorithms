@@ -16,9 +16,9 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
-@Configuration
+//@Configuration
 //basePackages 扫描的是mapper 接口
-@MapperScan(basePackages = {"com.dianwoba.rider.stalker.ridercenter.mapper"}, sqlSessionFactoryRef = FirstDataSourceConfig.SESSION_FACTORY_NAME)
+//@MapperScan(basePackages = {"com.dianwoba.rider.stalker.ridercenter.mapper"}, sqlSessionFactoryRef = FirstDataSourceConfig.SESSION_FACTORY_NAME)
 public class FirstDataSourceConfig {
 
     public static final String DATASOURC_ENAME = "ridercenterdbDataSource";

@@ -6,3 +6,8 @@ es:
     name: qa2elk
     host: 127.0.0.1,172.24.80.90,172.24.80.91
     port: 9300
+
+
+mybatis:
+  mapper-locations: classpath*: mapper/*Mapper*.xml
+

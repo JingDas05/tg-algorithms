@@ -16,8 +16,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
-@Configuration
-@MapperScan(basePackages = {"com.dianwoba.rider.stalker.riderextradb.mapper"}, sqlSessionFactoryRef = SecondDataSourceConfig.SESSION_FACTORY_NAME)
+//@Configuration
+//@MapperScan(basePackages = {"com.dianwoba.rider.stalker.riderextradb.mapper"}, sqlSessionFactoryRef = SecondDataSourceConfig.SESSION_FACTORY_NAME)
 public class SecondDataSourceConfig {
     
     public static final String DATASOURC_ENAME = "riderextradbDataSource";
