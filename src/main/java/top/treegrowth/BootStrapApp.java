@@ -17,8 +17,7 @@ import javax.annotation.Resource;
  */
 @SpringBootApplication
 //如果是双数据源，需要用下面的启动类
-//@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@MapperScan("top.treegrowth.mybatis.mapper")
+//@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})")
 public class BootStrapApp {
 
     @Resource
@@ -28,11 +27,16 @@ public class BootStrapApp {
         SpringApplication.run(BootStrapApp.class, args);
     }
 
+    @Configuration
     public class Start implements CommandLineRunner {
         @Override
         public void run(String... strings) throws Exception {
             System.out.println("项目启动时，本方法会执行");
-            client.test();
+            try {
+                client.test();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

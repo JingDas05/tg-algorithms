@@ -1,6 +1,10 @@
 server:
   port: 4567
 
+logging:
+   level:
+     top.treegrowth: debug
+
 es:
   cluster:
     name: qa2elk

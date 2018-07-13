@@ -17,12 +17,14 @@ public class MyService {
     @Resource
     private MyMapper myMapper;
 
-    @Transactional
+//    @Transactional(noRollbackFor = RuntimeException.class)
+    @Transactional()
     public void insert() {
         My my = new My();
         my.setId(111);
         my.setName("名字");
         my.setAge(13);
         myMapper.insert(my);
+        throw new RuntimeException();
     }
 }
