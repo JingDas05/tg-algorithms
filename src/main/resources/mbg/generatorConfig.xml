@@ -47,5 +47,9 @@
             <!--<generatedKey column="id" sqlStatement="MYSQL" identity="true" type="post"/>-->
         </table>
 
+        <table tableName="you" delimitIdentifiers="true">
+            <!--<generatedKey column="id" sqlStatement="MYSQL" identity="true" type="post"/>-->
+        </table>
+
     </context>
 </generatorConfiguration>
