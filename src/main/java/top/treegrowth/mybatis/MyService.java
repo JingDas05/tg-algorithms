@@ -22,11 +22,12 @@ public class MyService {
     private YouMapper youMapper;
 
     //    @Transactional(noRollbackFor = RuntimeException.class)
+
     /**
      * Transactional原理 CglibAopProxy 是关键类
-     *
+     * <p>
      * 调用 determineTransactionAttribute
-     *
+     * <p>
      * 调用
      * SpringTransactionAnnotationParser#parseTransactionAnnotation
      * 调用
@@ -50,7 +51,7 @@ public class MyService {
      * AbstractPlatformTransactionManager#rollback(TransactionStatus status)方法
      * 实际调用
      * DataSourceTransactionManager#doRollback(DefaultTransactionStatus status)方法
-     * */
+     */
     @Transactional()
     public void insert() {
         My my = new My();
@@ -58,6 +59,10 @@ public class MyService {
         my.setName("名字1");
         my.setAge(1);
         myMapper.insert(my);
+        child();
+    }
+
+    private void child() {
         You you = new You();
         you.setId(222);
         you.setName("名字2");
