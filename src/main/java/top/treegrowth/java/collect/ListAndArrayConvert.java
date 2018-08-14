@@ -16,5 +16,6 @@ public class ListAndArrayConvert {
         String[] strings = elements.toArray(new String[0]);
         elements.addAll(Arrays.asList("2", "3"));
         System.out.println(elements);
+        System.out.println(ListAndArrayConvert.class.getName());
     }
 }
