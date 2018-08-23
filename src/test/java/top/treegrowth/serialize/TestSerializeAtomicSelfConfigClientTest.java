@@ -8,7 +8,7 @@ import top.treegrowth.BaseTest;
  * @author wusi
  * @version 2018/8/9.
  */
-public class TestSerializeAtomicClientTest extends BaseTest {
+public class TestSerializeAtomicSelfConfigClientTest extends BaseTest {
 
     @Autowired
     SerializeClient serializeClient;
