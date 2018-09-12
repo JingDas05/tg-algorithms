@@ -9,5 +9,10 @@ public class Client {
     public static void main(String[] args) {
         Student student = new Student();
         System.out.println(student.getName());
+        test(new StudentSub());
+    }
+
+    public static void test(Student student) {
+
     }
 }
