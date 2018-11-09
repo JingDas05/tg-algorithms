@@ -18,6 +18,7 @@ public class FileReader {
         while ((line = reader.readLine()) != null) {
             try {
                 System.out.println(Integer.parseInt(line));
+                System.out.println(Thread.currentThread().getId());
             } catch (Exception e) {
                 e.printStackTrace();
             }
