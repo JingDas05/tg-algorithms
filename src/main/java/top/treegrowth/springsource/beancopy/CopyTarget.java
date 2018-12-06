@@ -6,9 +6,9 @@ package top.treegrowth.springsource.beancopy;
  */
 public class CopyTarget {
 
-    String name;
-    Integer age;
-    Integer subAge;
+    private String name;
+    private Integer age;
+    private Integer subAge;
 
     public String getName() {
         return name;
