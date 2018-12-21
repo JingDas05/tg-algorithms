@@ -574,6 +574,7 @@ public abstract class AbstractQueuedSynchronizer
     static final long spinForTimeoutThreshold = 1000L;
 
     /**
+     * 自旋的方式入队，CAS设置tail过程中，竞争一次竞争不到，我就多次竞争，总会排到的
      * Inserts node into queue, initializing if necessary. See picture above.
      *
      * @param node the node to insert
@@ -582,10 +583,14 @@ public abstract class AbstractQueuedSynchronizer
     private Node enq(final Node node) {
         for (; ; ) {
             Node t = tail;
-            if (t == null) { // Must initialize
+            // 如果tail==null must initialize head, and tail->head
+            if (t == null) {
+                // head node, new Node()时 waitStatus=0
                 if (compareAndSetHead(new Node()))
                     tail = head;
             } else {
+                // node.prev -> tail again
+                // 不断重试入队
                 node.prev = t;
                 if (compareAndSetTail(t, node)) {
                     t.next = node;
@@ -596,22 +601,28 @@ public abstract class AbstractQueuedSynchronizer
     }
 
     /**
+     * 把线程包装成node，同时进入到队列中，参数mode此时是Node.EXCLUSIVE，代表独占模式
      * Creates and enqueues node for current thread and given mode.
      *
      * @param mode Node.EXCLUSIVE for exclusive, Node.SHARED for shared
      * @return the new node
      */
     private Node addWaiter(Node mode) {
+        // 把当前node加到链表的最后面去，也就是进到阻塞队列的最后
         Node node = new Node(Thread.currentThread(), mode);
         // Try the fast path of enq; backup to full enq on failure
         Node pred = tail;
         if (pred != null) {
+            // node.prev -> tail
             node.prev = pred;
+            // cas 设置tail为node
             if (compareAndSetTail(pred, node)) {
+                // pred.next -> node
                 pred.next = node;
                 return node;
             }
         }
+        // if tail==null || cas failure(有线程竞争入队) 自旋入队
         enq(node);
         return node;
     }
@@ -782,6 +793,7 @@ public abstract class AbstractQueuedSynchronizer
     }
 
     /**
+     * 当前线程没有抢到锁，是否需要挂起当前线程, params(prev, current)
      * Checks and updates status for a node that failed to acquire.
      * Returns true if thread should block. This is the main signal
      * control in all acquire loops.  Requires that pred == node.prev.
@@ -789,15 +801,22 @@ public abstract class AbstractQueuedSynchronizer
      * @param pred node's predecessor holding status
      * @param node the node
      * @return {@code true} if thread should block
+     * 如果返回true, 说明前驱节点的waitStatus==-1，是正常情况，那么当前线程需要被挂起，等待以后被唤醒
+     * 以后是被前驱节点唤醒，就等着前驱节点拿到锁，然后释放锁的时候叫你好了
+     * 如果返回false, 说明当前不需要被挂起
      */
     private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
         int ws = pred.waitStatus;
+        // 前驱节点的 waitStatus == -1 ，说明前驱节点状态正常，当前线程需要挂起，直接可以返回true
         if (ws == Node.SIGNAL)
             /*
              * This node has already set status asking a release
              * to signal it, so it can safely park.
              */
             return true;
+        // 前驱节点 waitStatus大于0 ，之前说过，大于0,前驱节点取消了排队
+        // 进入阻塞队列排队的线程会被挂起，而唤醒的操作是由前驱节点完成的。
+        // find prev node where waitStatus <=0
         if (ws > 0) {
             /*
              * Predecessor was cancelled. Skip over predecessors and
@@ -809,6 +828,8 @@ public abstract class AbstractQueuedSynchronizer
             pred.next = node;
         } else {
             /*
+             * 前驱节点的waitStatus不等于-1和1，那也就是只可能是0，-2，-3
+             * 用CAS将前驱节点的waitStatus设置为Node.SIGNAL(也就是-1)
              * waitStatus must be 0 or PROPAGATE.  Indicate that we
              * need a signal, but don't park yet.  Caller will need to
              * retry to make sure it cannot acquire before parking.
@@ -845,6 +866,7 @@ public abstract class AbstractQueuedSynchronizer
      */
 
     /**
+     * 线程挂起，然后被唤醒后去获取锁
      * Acquires in exclusive uninterruptible mode for thread already in
      * queue. Used by condition wait methods as well as acquire.
      *
@@ -857,14 +879,25 @@ public abstract class AbstractQueuedSynchronizer
         try {
             boolean interrupted = false;
             for (; ; ) {
+                // 返回node的 pre node
                 final Node p = node.predecessor();
+                // p == head 说明当前节点虽然进到了阻塞队列，但是是阻塞队列的第一个，因为它的前驱是head
+                // 阻塞队列不包含head节点，head一般指的是占有锁的线程，head后面的才称为阻塞队列
+                // 首先，它是队头，这个是第一个条件，其次，当前的head有可能是刚刚初始化的node，
+                // enq(node) 方法里面有提到，head是延时初始化的，而且new Node()的时候没有设置任何线程
+                // 也就是说，当前的head不属于任何一个线程，所以作为队头，可以去试一试，
                 if (p == head && tryAcquire(arg)) {
+                    // 如果抢到了，node -> head
                     setHead(node);
                     p.next = null; // help GC
                     failed = false;
                     return interrupted;
                 }
+                // 如果当前的node不是队头，抢锁也没抢过别人，进行下面的逻辑
+                // shouldParkAfterFailedAcquire -> 当前线程没有抢到锁，是否需要挂起当前线程, params(prev, current)
                 if (shouldParkAfterFailedAcquire(p, node) &&
+                        // 因为前面返回true，所以需要挂起线程，这个方法就是负责挂起线程的
+                        // 挂起线程后，这个方法就不会再执行了，已经被挂起了
                         parkAndCheckInterrupt())
                     interrupted = true;
             }
@@ -1048,6 +1081,9 @@ public abstract class AbstractQueuedSynchronizer
     // Main exported methods
 
     /**
+     * 尝试直接获取锁，返回值是boolean，
+     * 代表是否获取到锁返回true：1.没有线程在等待锁；2.重入锁，线程本来就持有锁，也就可以理所当然可以直接获取
+     * <p>
      * Attempts to acquire in exclusive mode. This method should query
      * if the state of the object permits it to be acquired in the
      * exclusive mode, and if so to acquire it.
@@ -1184,6 +1220,8 @@ public abstract class AbstractQueuedSynchronizer
     }
 
     /**
+     * <p>
+     * <p>
      * Acquires in exclusive mode, ignoring interrupts.  Implemented
      * by invoking at least once {@link #tryAcquire},
      * returning on success.  Otherwise the thread is queued, possibly
@@ -1197,6 +1235,9 @@ public abstract class AbstractQueuedSynchronizer
      */
     public final void acquire(int arg) {
         if (!tryAcquire(arg) &&
+                //  tryAcquire(arg)没有成功，这个时候需要把当前线程挂起，放到阻塞队列中
+                // addWaiter(Node.EXCLUSIVE)，把线程包装成node，同时进入到队列中，参数mode此时是Node.EXCLUSIVE，代表独占模式
+                //
                 acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
             selfInterrupt();
     }

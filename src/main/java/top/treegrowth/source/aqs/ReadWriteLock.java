@@ -35,10 +35,6 @@
 
 package top.treegrowth.source.aqs;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 /**
  * A {@code ReadWriteLock} maintains a pair of associated {@link
  * Lock locks}, one for read-only operations and one for writing.
@@ -113,12 +109,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * You should consider all of these things when evaluating the suitability
  * of a given implementation for your application.
  *
+ * @author Doug Lea
  * @see ReentrantReadWriteLock
  * @see Lock
  * @see ReentrantLock
- *
  * @since 1.5
- * @author Doug Lea
  */
 public interface ReadWriteLock {
     /**

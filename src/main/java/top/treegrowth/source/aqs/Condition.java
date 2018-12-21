@@ -37,7 +37,6 @@ package top.treegrowth.source.aqs;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 
 /**
  * {@code Condition} factors out the {@code Object} monitor

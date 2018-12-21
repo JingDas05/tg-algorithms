@@ -35,9 +35,6 @@
 
 package top.treegrowth.source.aqs;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * {@code Lock} implementations provide more extensive locking
