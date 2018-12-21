@@ -151,7 +151,9 @@ public class ReentrantLock implements Lock, java.io.Serializable {
             int c = getState() - releases;
             if (Thread.currentThread() != getExclusiveOwnerThread())
                 throw new IllegalMonitorStateException();
+            // 是否完全释放锁
             boolean free = false;
+            // 其实就是重入的问题，如果c==0，也就是说没有嵌套锁了，可以释放了，否则还不能释放掉
             if (c == 0) {
                 free = true;
                 setExclusiveOwnerThread(null);

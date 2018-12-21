@@ -656,6 +656,8 @@ public abstract class AbstractQueuedSynchronizer
             compareAndSetWaitStatus(node, ws, 0);
 
         /*
+        * 唤醒后继节点，但是有可能后继节点取消了等待（waitStatus==1）
+        * 从队尾往前找，找到waitStatus<=0的所有节点中排在最前面的
          * Thread to unpark is held in successor, which is normally
          * just the next node.  But if cancelled or apparently null,
          * traverse backwards from tail to find the actual
@@ -1301,8 +1303,10 @@ public abstract class AbstractQueuedSynchronizer
      */
     public final boolean release(int arg) {
         if (tryRelease(arg)) {
+            // if tryRelease success
             Node h = head;
             if (h != null && h.waitStatus != 0)
+                // 唤醒后继结点
                 unparkSuccessor(h);
             return true;
         }
