@@ -35,7 +35,7 @@ import java.util.function.Function;
  * unsynchronized and permits nulls.)  This class makes no guarantees as to
  * the order of the map; in particular, it does not guarantee that the order
  * will remain constant over time.
- * <p>
+ *
  * <p>This implementation provides constant-time performance for the basic
  * operations (<tt>get</tt> and <tt>put</tt>), assuming the hash function
  * disperses the elements properly among the buckets.  Iteration over
@@ -44,7 +44,7 @@ import java.util.function.Function;
  * of key-value mappings).  Thus, it's very important not to set the initial
  * capacity too high (or the load factor too low) if iteration performance is
  * important.
- * <p>
+ *
  * <p>An instance of <tt>HashMap</tt> has two parameters that affect its
  * performance: <i>initial capacity</i> and <i>load factor</i>.  The
  * <i>capacity</i> is the number of buckets in the hash table, and the initial
@@ -55,7 +55,7 @@ import java.util.function.Function;
  * current capacity, the hash table is <i>rehashed</i> (that is, internal data
  * structures are rebuilt) so that the hash table has approximately twice the
  * number of buckets.
- * <p>
+ *
  * <p>As a general rule, the default load factor (.75) offers a good
  * tradeoff between time and space costs.  Higher values decrease the
  * space overhead but increase the lookup cost (reflected in most of
@@ -66,7 +66,7 @@ import java.util.function.Function;
  * rehash operations.  If the initial capacity is greater than the
  * maximum number of entries divided by the load factor, no rehash
  * operations will ever occur.
- * <p>
+ *
  * <p>If many mappings are to be stored in a <tt>HashMap</tt>
  * instance, creating it with a sufficiently large capacity will allow
  * the mappings to be stored more efficiently than letting it perform
@@ -75,7 +75,7 @@ import java.util.function.Function;
  * down performance of any hash table. To ameliorate impact, when keys
  * are {@link Comparable}, this class may use comparison order among
  * keys to help break ties.
- * <p>
+ *
  * <p><strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access a hash map concurrently, and at least one of
  * the threads modifies the map structurally, it <i>must</i> be
@@ -90,7 +90,7 @@ import java.util.function.Function;
  * method.  This is best done at creation time, to prevent accidental
  * unsynchronized access to the map:<pre>
  *   Map m = Collections.synchronizedMap(new HashMap(...));</pre>
- * <p>
+ *
  * <p>The iterators returned by all of this class's "collection view methods"
  * are <i>fail-fast</i>: if the map is structurally modified at any time after
  * the iterator is created, in any way except through the iterator's own
@@ -99,7 +99,7 @@ import java.util.function.Function;
  * modification, the iterator fails quickly and cleanly, rather than risking
  * arbitrary, non-deterministic behavior at an undetermined time in the
  * future.
- * <p>
+ *
  * <p>Note that the fail-fast behavior of an iterator cannot be guaranteed
  * as it is, generally speaking, impossible to make any hard guarantees in the
  * presence of unsynchronized concurrent modification.  Fail-fast iterators
@@ -107,7 +107,7 @@ import java.util.function.Function;
  * Therefore, it would be wrong to write a program that depended on this
  * exception for its correctness: <i>the fail-fast behavior of iterators
  * should be used only to detect bugs.</i>
- * <p>
+ *
  * <p>This class is a member of the
  * <a href="{@docRoot}/../technotes/guides/collections/index.html">
  * Java Collections Framework</a>.
@@ -339,6 +339,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
     }
 
     /**
+     * 如果实现了 comparable 接口，返回class，否则返回null
      * Returns x's Class if it is of the form "class C implements
      * Comparable<C>", else null.
      */
@@ -365,6 +366,9 @@ public class HashMap<K, V> extends AbstractMap<K, V>
     }
 
     /**
+     * kc: the class of k
+     * k: the key wait insert
+     * x: exist key in tree
      * Returns k.compareTo(x) if x matches kc (k's screened comparable
      * class), else 0.
      */
@@ -540,12 +544,12 @@ public class HashMap<K, V> extends AbstractMap<K, V>
     /**
      * Returns the value to which the specified key is mapped,
      * or {@code null} if this map contains no mapping for the key.
-     * <p>
+     *
      * <p>More formally, if this map contains a mapping from a key
      * {@code k} to a value {@code v} such that {@code (key==null ? k==null :
      * key.equals(k))}, then this method returns {@code v}; otherwise
      * it returns {@code null}.  (There can be at most one such mapping.)
-     * <p>
+     *
      * <p>A return value of {@code null} does not <i>necessarily</i>
      * indicate that the map contains no mapping for the key; it's also
      * possible that the map explicitly maps the key to {@code null}.
@@ -581,7 +585,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                 // 处理树状结构
                 if (first instanceof HashMap.TreeNode)
                     return ((HashMap.TreeNode<K, V>) first).getTreeNode(hash, key);
-                // 处理链表结构
+                // 遍历链表寻找key相同的node
                 do {
                     if (e.hash == hash &&
                             ((k = e.key) == key || (key != null && key.equals(k))))
@@ -657,7 +661,8 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                 // 处理红黑树的结构
                 e = ((HashMap.TreeNode<K, V>) p).putTreeVal(this, tab, hash, key, value);
             else {
-                // 处理链表的情况
+                // 链表
+                // 遍历链表，如果没有找到hash碰撞且key相同的节点，就在链表的最后追加，如果找到了就break
                 for (int binCount = 0; ; ++binCount) {
                     // 处理到队尾的情况并且e赋值
                     if ((e = p.next) == null) {
@@ -668,7 +673,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                             treeifyBin(tab, hash);
                         break;
                     }
-                    // 如果链表中已经存在，则返回
+                    // 如果链表中已经存在 break
                     if (e.hash == hash &&
                             ((k = e.key) == key || (key != null && key.equals(k))))
                         break;
@@ -780,7 +785,8 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                         do {
                             // 暂存e的子节点
                             next = e.next;
-                            // 处理e节点
+                            // 不是(e.hash & (oldCap-1));而是(e.hash & oldCap)
+                            // 处理e节点,e.hash & oldCap 判断是否需要移动
                             if ((e.hash & oldCap) == 0) {
                                 if (loTail == null)
                                     loHead = e;
@@ -1945,6 +1951,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         }
 
         /**
+         * 返回树的根节点
          * Returns root of tree containing this node.
          */
         final HashMap.TreeNode<K, V> root() {
@@ -2021,10 +2028,12 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         }
 
         /**
+         * 当equal hashCodes and
+         * <p>
          * Tie-breaking utility for ordering insertions when equal
          * hashCodes and non-comparable. We don't require a total
-         * order, just a consistent insertion rule to maintain
-         * equivalence across rebalancings. Tie-breaking further than
+         * order, just a consistent（一致的） insertion rule to maintain
+         * equivalence(均等) across rebalancings. Tie-breaking further than
          * necessary simplifies testing a bit.
          */
         static int tieBreakOrder(Object a, Object b) {
@@ -2102,24 +2111,32 @@ public class HashMap<K, V> extends AbstractMap<K, V>
 
         /**
          * Tree version of putVal.
+         * map为当前hashMap的引用
+         * tab为当前存储的数组
+         * h为key的hashCode
          */
         final HashMap.TreeNode<K, V> putTreeVal(HashMap<K, V> map, HashMap.Node<K, V>[] tab,
                                                 int h, K k, V v) {
             Class<?> kc = null;
             boolean searched = false;
             HashMap.TreeNode<K, V> root = (parent != null) ? root() : this;
+            // 从根节点开始遍历，赋值 dir，显示是左子树还是右子树
             for (HashMap.TreeNode<K, V> p = root; ; ) {
                 int dir, ph;
                 K pk;
+                // hash属于左子树还是右子树
                 if ((ph = p.hash) > h)
                     dir = -1;
                 else if (ph < h)
                     dir = 1;
                 else if ((pk = p.key) == k || (k != null && k.equals(pk)))
+                    // 如果相等，直接返回，不插入
                     return p;
+                    // 处理hash碰撞的情况
                 else if ((kc == null &&
                         (kc = comparableClassFor(k)) == null) ||
                         (dir = compareComparables(kc, k, pk)) == 0) {
+                    // 如果key没有实现comparable接口，或者 k compare pk ==0
                     if (!searched) {
                         HashMap.TreeNode<K, V> q, ch;
                         searched = true;
@@ -2131,7 +2148,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
                     }
                     dir = tieBreakOrder(k, pk);
                 }
-
+                // 暂存当前节点
                 HashMap.TreeNode<K, V> xp = p;
                 if ((p = (dir <= 0) ? p.left : p.right) == null) {
                     HashMap.Node<K, V> xpn = xp.next;
