@@ -1,16 +1,12 @@
 package top.treegrowth;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import top.treegrowth.mybatis.Client;
-import top.treegrowth.parallelism.atomic.AtomicClient;
-import top.treegrowth.parallelism.volatiletest.VolatileTest;
+import top.treegrowth.concurrent.atomic.AtomicClient;
+import top.treegrowth.concurrent.volatiletest.VolatileTest;
 
 import javax.annotation.Resource;
 
