@@ -1,5 +1,7 @@
 package top.treegrowth.java.spider;
 
+import top.treegrowth.io.buffer.FileOperator;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -21,32 +23,9 @@ public class SpiderTest {
             String target = sourceContent.substring(beginIndex + 26, beginIndex + 86);
             // 换行
             String[] splitContent = target.split("<br>");
-            write(splitContent);
+            FileOperator.write(splitContent);
         }
 
-    }
-
-    // 写文件
-    private static void write(String[] splitContent) {
-        BufferedWriter out = null;
-        try {
-            out = new BufferedWriter(new FileWriter("content.txt"));
-            for (String each : splitContent) {
-                out.write(each);
-                out.newLine();
-            }
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     // 获取网页内容
