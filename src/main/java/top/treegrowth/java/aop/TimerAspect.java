@@ -15,15 +15,15 @@ import org.springframework.stereotype.Component;
 public class TimerAspect {
 
     @Pointcut("@annotation(top.treegrowth.java.aop.Timer)")
-    public void actualMethod() {
+    public void pointCut() {
     }
 
-    @Before("actualMethod()")
+    @Before("pointCut()")
     public void before() {
         System.out.println("before");
     }
 
-    @After("actualMethod()")
+    @After("pointCut()")
     public void after() {
         System.out.println("after");
     }
