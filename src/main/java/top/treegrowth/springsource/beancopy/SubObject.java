@@ -4,10 +4,10 @@ import lombok.Data;
 
 /**
  * @author wusi
- * @version 2018/9/3.
+ * @since 2019-07-25 17:54
  */
 @Data
-public class Parent {
+public class SubObject {
 
-    private String name;
+    private Integer code;
 }

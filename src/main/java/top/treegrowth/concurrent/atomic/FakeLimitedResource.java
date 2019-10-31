@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * bool 布尔值的原子操作
+ *
  * @author wusi
  * @version 2018/8/9.
  */

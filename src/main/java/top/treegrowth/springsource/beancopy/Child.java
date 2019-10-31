@@ -1,25 +1,18 @@
 package top.treegrowth.springsource.beancopy;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.util.List;
+
 /**
  * @author wusi
  * @version 2018/9/3.
  */
-public class Child extends Parent{
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class Child extends Parent {
 
     private Integer age;
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    @Override
-    public String toString() {
-        return "Child{" +
-                "age=" + age +
-                '}';
-    }
+    private List<SubObject> subObjects;
 }

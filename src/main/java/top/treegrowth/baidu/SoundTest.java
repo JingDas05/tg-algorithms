@@ -4,6 +4,9 @@ import com.baidu.aip.speech.AipSpeech;
 import org.json.JSONObject;
 
 /**
+ *
+ * 百度语音识别，语音转文字
+ *
  * @author wusi
  * @version 2018/12/9 20:08.
  */

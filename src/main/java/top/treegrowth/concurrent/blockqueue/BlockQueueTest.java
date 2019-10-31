@@ -4,6 +4,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ *
+ * 阻塞队列 demo
+ *
  * @author wusi
  * @version 2018/8/6.
  */
