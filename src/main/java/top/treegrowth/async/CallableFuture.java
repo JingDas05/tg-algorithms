@@ -1,5 +1,6 @@
 package top.treegrowth.async;
 
+import java.util.Arrays;
 import java.util.concurrent.*;
 
 /**
@@ -34,5 +35,7 @@ public class CallableFuture {
         }
 
         System.out.println("所有任务执行完毕<<<"+DateUtil.getNowTimeString());
+        System.out.println("主线程堆栈信息"+ Arrays.toString(Thread.currentThread().getStackTrace()));
+        System.out.println("主线程id"+ Thread.currentThread().getId());
     }
 }

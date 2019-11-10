@@ -1,5 +1,6 @@
 package top.treegrowth.async;
 
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 /**
@@ -15,6 +16,8 @@ class Task implements Callable<Integer> {
         for(int i=0;i<100;i++)
             sum += i;
         System.out.println("子线程完成计算<"+DateUtil.getNowTimeString());
+        System.out.println("子线程堆栈信息"+ Arrays.toString(Thread.currentThread().getStackTrace()));
+        System.out.println("子线程id"+ Thread.currentThread().getId());
         return sum;
     }
 }
