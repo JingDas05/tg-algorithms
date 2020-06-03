@@ -20,22 +20,21 @@ public class CallableFuture {
             e1.printStackTrace();
         }
 
-        System.out.println("主线程在执行任务>>>"+ DateUtil.getNowTimeString());
+        System.out.println("主线程在执行任务>>>" + DateUtil.getNowTimeString());
         //System.out.println("子线程取消任务>>>"+ DateUtil.getNowTimeString());
         //result.cancel(true);
         try {
-            System.out.println("task运行结果>>"+result.get()+DateUtil.getNowTimeString());
+            System.out.println("task运行结果>>" + result.get() + DateUtil.getNowTimeString());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        }
-        catch (CancellationException e) {
-            System.out.println("子线程已经取消任务"+ DateUtil.getNowTimeString());
+        } catch (CancellationException e) {
+            System.out.println("子线程已经取消任务" + DateUtil.getNowTimeString());
         }
 
-        System.out.println("所有任务执行完毕<<<"+DateUtil.getNowTimeString());
-        System.out.println("主线程堆栈信息"+ Arrays.toString(Thread.currentThread().getStackTrace()));
-        System.out.println("主线程id"+ Thread.currentThread().getId());
+        System.out.println("所有任务执行完毕<<<" + DateUtil.getNowTimeString());
+        System.out.println("主线程堆栈信息" + Arrays.toString(Thread.currentThread().getStackTrace()));
+        System.out.println("主线程id" + Thread.currentThread().getId());
     }
 }
